@@ -547,7 +547,7 @@ const ReviewRow = ({ label, value }) => (
 );
 
 /* ─── Step 6: Review ─────────────────────────────────────── */
-function Step6({ data, estimate }) {
+function Step6({ data, estimate, consentChecked, setConsentChecked }) {
   const svc = SERVICES.find(s => s.id === data.service);
   const freq = FREQUENCIES.find(f => f.id === data.frequency);
   const selectedAddons = (data.addons || []).map(id => ADDONS.find(a => a.id === id)).filter(Boolean);
@@ -557,7 +557,7 @@ function Step6({ data, estimate }) {
       <h3 style={{ fontSize: '22px', fontWeight: 800, color: DARK, marginBottom: '0.4rem', fontFamily: 'var(--font-display)' }}>
         Review Your Quote
       </h3>
-      <p style={{ fontSize: '15px', color: GRAY, marginBottom: '1.5rem' }}>Everything look right? Hit submit and we'll confirm within 2 hours.</p>
+      <p style={{ fontSize: '15px', color: GRAY, marginBottom: '1.5rem' }}>Everything look right? Hit submit and we&apos;ll confirm within 2 hours.</p>
 
       <div style={{ background: WHITE, borderRadius: '16px', border: `1.5px solid ${BORDER}`, overflow: 'hidden' }}>
         <div style={{ background: DARK, padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -593,11 +593,43 @@ function Step6({ data, estimate }) {
         )}
       </div>
 
-      <div style={{ marginTop: '1rem', padding: '0.75rem 1rem', borderRadius: '10px', background: 'rgba(21,120,229,0.07)', border: `1px solid rgba(21,120,229,0.2)` }}>
-        <p style={{ fontSize: '13px', color: GRAY, margin: 0 }}>
-          By submitting, you agree to be contacted by JSL Cleaning Services LLC. No payment required now. This is a free estimate only.
-        </p>
-      </div>
+      {/* ── Required consent checkbox ─────────────────────────── */}
+      <label
+        htmlFor="qf-consent"
+        style={{
+          display: 'flex', alignItems: 'flex-start', gap: '0.65rem',
+          marginTop: '1.25rem', cursor: 'pointer',
+          padding: '0.85rem 1rem', borderRadius: '12px',
+          background: consentChecked ? 'rgba(21,120,229,0.05)' : '#FFF9F9',
+          border: `1.5px solid ${consentChecked ? 'rgba(21,120,229,0.25)' : '#FECACA'}`,
+          transition: 'all 0.2s ease',
+        }}
+      >
+        <input
+          id="qf-consent"
+          type="checkbox"
+          checked={consentChecked}
+          onChange={e => setConsentChecked(e.target.checked)}
+          required
+          style={{ width: 16, height: 16, marginTop: '2px', accentColor: BLUE, flexShrink: 0, cursor: 'pointer' }}
+        />
+        <span style={{ fontSize: '13px', color: GRAY, lineHeight: 1.6, fontFamily: 'var(--font-body)' }}>
+          I agree that JSL Cleaning Services LLC may contact me about this quote by phone, email, or text.
+          No payment is required now. View our{' '}
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new CustomEvent('jsl:open-legal', { detail: 'privacy' }))}
+            style={{
+              background: 'none', border: 'none', padding: 0,
+              color: BLUE, fontWeight: 600, fontSize: '13px',
+              cursor: 'pointer', fontFamily: 'inherit', textDecoration: 'underline',
+            }}
+          >
+            Privacy Policy
+          </button>.
+          {' '}<span style={{ color: RED, fontWeight: 700 }}>*</span>
+        </span>
+      </label>
     </div>
   );
 }
@@ -773,6 +805,7 @@ export default function QuoteForm() {
   const [submitError, setSubmitError] = useState('');        // network error
   const [fieldErrors, setFieldErrors] = useState({});        // validation errors
   const [rateLimitMsg, setRateLimitMsg] = useState('');      // rate-limit message
+  const [consentChecked, setConsentChecked] = useState(false); // privacy consent
   const honeypotRef = useRef(null);                          // bot trap
   const stepBodyRef = useRef(null);
   const stepDirRef = useRef(1); /* 1 = forward, -1 = backward */
@@ -827,6 +860,7 @@ export default function QuoteForm() {
     if (step === 1) return !!data.service;
     if (step === 3) return !!data.startDate;
     if (step === 5) return !!data.firstName && !!data.email && !!data.phone && !!data.address;
+    if (step === 6) return consentChecked; // must agree to privacy policy before submit
     return true;
   };
 
@@ -912,7 +946,7 @@ export default function QuoteForm() {
       case 3: return <Step3 data={data} set={set} />;
       case 4: return <Step4 data={data} set={set} />;
       case 5: return <Step5 data={data} set={set} fieldErrors={fieldErrors} />;
-      case 6: return <Step6 data={data} estimate={estimate} />;
+      case 6: return <Step6 data={data} estimate={estimate} consentChecked={consentChecked} setConsentChecked={setConsentChecked} />;
       default: return null;
     }
   };
@@ -1103,6 +1137,29 @@ export default function QuoteForm() {
                     </button>
                   </div>
                 </div>
+              </div>
+
+              {/* Trust Badges */}
+              <div style={{
+                display: 'flex', justifyContent: 'center',
+                gap: 'clamp(1rem, 3vw, 2.5rem)',
+                padding: '0.75rem 2rem',
+                borderTop: `1px solid ${BORDER}`,
+                flexWrap: 'wrap',
+              }}>
+                {[
+                  { icon: '🔒', text: 'Encrypted & secure' },
+                  { icon: '🛡️', text: 'Never sold or shared' },
+                  { icon: '✅', text: 'Free estimate, no commitment' },
+                ].map(({ icon, text }) => (
+                  <span key={text} style={{
+                    fontSize: '11px', color: GRAY, fontWeight: 500,
+                    display: 'flex', alignItems: 'center', gap: '0.3rem',
+                    fontFamily: 'var(--font-body)',
+                  }}>
+                    <span>{icon}</span> {text}
+                  </span>
+                ))}
               </div>
             </div>
 

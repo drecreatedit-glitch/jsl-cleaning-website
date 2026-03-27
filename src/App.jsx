@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -15,6 +15,8 @@ import CTABanner from './components/CTABanner';
 import Footer from './components/Footer';
 import ScrollProgressBar from './components/ScrollProgressBar';
 import CustomCursor from './components/CustomCursor';
+import LegalModal from './components/LegalModal';
+import CookieBanner from './components/CookieBanner';
 import './styles/globals.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -22,6 +24,10 @@ gsap.registerPlugin(ScrollTrigger);
 export default function App() {
   const lenisRef = useRef(null);
   const rafCallbackRef = useRef(null);
+  const [legalModal, setLegalModal] = useState(null); // null | 'privacy' | 'terms'
+
+  const openLegal  = useCallback((page) => setLegalModal(page), []);
+  const closeLegal = useCallback(() => setLegalModal(null), []);
 
   useEffect(() => {
     // Initialize Lenis smooth scroll
@@ -49,6 +55,14 @@ export default function App() {
     };
   }, []);
 
+  // Global event bus for opening legal modals from anywhere
+  // (CookieBanner's "Learn more", Footer links, etc.)
+  useEffect(() => {
+    const handler = (e) => openLegal(e.detail);
+    window.addEventListener('jsl:open-legal', handler);
+    return () => window.removeEventListener('jsl:open-legal', handler);
+  }, [openLegal]);
+
   return (
     <div style={{ position: 'relative' }}>
       <ScrollProgressBar />
@@ -65,7 +79,9 @@ export default function App() {
         <Testimonials />
         <CTABanner />
       </main>
-      <Footer />
+      <Footer openLegal={openLegal} />
+      <LegalModal page={legalModal} onClose={closeLegal} />
+      <CookieBanner />
     </div>
   );
 }

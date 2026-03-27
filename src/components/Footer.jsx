@@ -73,7 +73,7 @@ const FootLink = ({ children }) => (
   </li>
 );
 
-export default function Footer() {
+export default function Footer({ openLegal = () => {} }) {
   const footerRef = useRef(null);
   const colRefs   = useRef([]);
 
@@ -236,12 +236,33 @@ export default function Footer() {
           flexWrap: 'wrap',
           gap: '1rem',
         }}>
-          <p style={{
-            fontSize: '13px',
-            color: 'rgba(255,255,255,0.28)',
-          }}>
-            © 2025 JSL Cleaning Services LLC · All Rights Reserved
+          <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.28)' }}>
+            © 2026 JSL Cleaning Services LLC · All Rights Reserved
           </p>
+
+          {/* Legal links */}
+          <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
+            {[
+              { label: 'Privacy Policy', page: 'privacy' },
+              { label: 'Terms of Service', page: 'terms' },
+            ].map(({ label, page }) => (
+              <button
+                key={page}
+                onClick={() => openLegal(page)}
+                style={{
+                  background: 'none', border: 'none', padding: 0,
+                  fontSize: '12px', color: 'rgba(255,255,255,0.35)',
+                  cursor: 'pointer', fontFamily: 'var(--font-body)',
+                  transition: 'color 0.2s', textDecoration: 'underline',
+                  textUnderlineOffset: '3px',
+                }}
+                onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.75)'}
+                onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.35)'}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
 
           {/* Social icons */}
           <div style={{ display: 'flex', gap: '0.5rem' }}>
