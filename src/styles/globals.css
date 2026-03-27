@@ -1,0 +1,471 @@
+/* ─────────────────────────────────────────────────────────────
+   JSL Cleaning Services — Global Design System
+   globals.css
+───────────────────────────────────────────────────────────────*/
+
+/* ─── Google Fonts ───────────────────────────────────────────*/
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap');
+
+/* ─── Tailwind ───────────────────────────────────────────────*/
+@import "tailwindcss";
+
+/* ─── Brand Token System ─────────────────────────────────────*/
+:root {
+  /* Colors */
+  --blue:      #1578E5;
+  --blue-mid:  #3D8FF0;
+  --blue-light:#EBF3FF;
+  --blue-xlight:#F6FAFF;
+  --dark:      #0B1220;
+  --dark-mid:  #111a2e;
+  --gray:      #5A6A82;
+  --border:    #D8E6F8;
+  --white:     #ffffff;
+
+  /* Typography */
+  --font-display: 'Syne', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+
+  /* Spacing */
+  --section-py: 7rem;
+
+  /* Easing curves */
+  --ease-expo:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out:  cubic-bezier(0.645, 0.045, 0.355, 1);
+  --ease-bounce:  cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Animation durations */
+  --dur-fast:   0.3s;
+  --dur-mid:    0.6s;
+  --dur-slow:   0.9s;
+}
+
+/* ─── Base Reset ─────────────────────────────────────────────*/
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: auto; /* Lenis takes over */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--gray);
+  background-color: var(--white);
+  overflow-x: hidden;
+}
+
+/* ─── Lenis Smooth Scroll ────────────────────────────────────*/
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ─── Typography Scale ───────────────────────────────────────*/
+
+/* h1 — Hero headline */
+h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(52px, 6vw, 90px);
+  letter-spacing: -3px;
+  line-height: 1.05;
+  color: var(--dark);
+}
+
+/* h2 — Section headlines */
+h2 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(36px, 4vw, 56px);
+  letter-spacing: -2px;
+  line-height: 1.1;
+  color: var(--dark);
+}
+
+/* h3 — Card / sub-section titles */
+h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(20px, 2vw, 28px);
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+  color: var(--dark);
+}
+
+/* h4, h5, h6 — supporting headings */
+h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--dark);
+}
+
+/* Body paragraph */
+p {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--gray);
+}
+
+/* Eyebrow / label text */
+.eyebrow {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+
+/* ─── Layout Utilities ───────────────────────────────────────*/
+.container-xl {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(1rem, 4vw, 2rem);
+  padding-right: clamp(1rem, 4vw, 2rem);
+}
+
+.section-py {
+  padding-top: var(--section-py);
+  padding-bottom: var(--section-py);
+}
+
+/* ─── Visual Utilities ───────────────────────────────────────*/
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--blue) 0%, var(--blue-mid) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* On dark backgrounds — white text override */
+.text-on-dark h1,
+.text-on-dark h2,
+.text-on-dark h3,
+.text-on-dark p {
+  color: var(--white);
+}
+.text-on-dark p {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* Blue glow  */
+.blue-glow {
+  box-shadow: 0 0 80px rgba(21, 120, 229, 0.2);
+}
+
+/* Pill badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  background: rgba(21, 120, 229, 0.1);
+  border: 1px solid rgba(21, 120, 229, 0.25);
+  border-radius: 999px;
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Divider */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ─── Button System ──────────────────────────────────────────*/
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 15px;
+  border-radius: 8px;
+  padding: 0.85rem 2rem;
+  cursor: pointer;
+  transition: transform 0.2s var(--ease-expo),
+              box-shadow 0.2s var(--ease-expo),
+              background 0.2s ease;
+  border: none;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn:hover {
+  transform: translateY(-2px);
+}
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: var(--blue);
+  color: var(--white);
+  box-shadow: 0 4px 20px rgba(21, 120, 229, 0.35);
+}
+.btn-primary:hover {
+  background: var(--blue-mid);
+  box-shadow: 0 8px 30px rgba(21, 120, 229, 0.5);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--blue);
+  border: 1.5px solid var(--blue);
+}
+.btn-outline:hover {
+  background: rgba(21, 120, 229, 0.06);
+}
+
+.btn-ghost {
+  background: rgba(255,255,255,0.08);
+  color: var(--white);
+  border: 1.5px solid rgba(255,255,255,0.2);
+  backdrop-filter: blur(8px);
+}
+.btn-ghost:hover {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.4);
+}
+
+.btn-lg {
+  font-size: 16px;
+  padding: 1rem 2.5rem;
+}
+
+.btn-sm {
+  font-size: 13px;
+  padding: 0.6rem 1.4rem;
+}
+
+/* ─── Animation Utility Classes ─────────────────────────────*/
+/*
+  Usage:
+    1. IntersectionObserver: add class, then when in viewport
+       add 'is-visible'. The transition fires automatically.
+    2. GSAP ScrollTrigger: set initial state via class,
+       let GSAP animate to final state using 'is-visible'
+       or gsap.to() overrides.
+
+  All elements start invisible and transition to visible when
+  'is-visible' is added (or GSAP takes over).
+*/
+
+/* — fade-up ─ opacity + translateY */
+.fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity  0.7s ease,
+    transform 0.7s var(--ease-expo);
+}
+.fade-up.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* — fade-in ─ opacity only */
+.fade-in {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.fade-in.is-visible {
+  opacity: 1;
+}
+
+/* — slide-left ─ from left */
+.slide-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition:
+    opacity  0.7s var(--ease-expo),
+    transform 0.7s var(--ease-expo);
+}
+.slide-left.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* — slide-right ─ from right */
+.slide-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition:
+    opacity  0.7s var(--ease-expo),
+    transform 0.7s var(--ease-expo);
+}
+.slide-right.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* — scale-in ─ subtle scale */
+.scale-in {
+  opacity: 0;
+  transform: scale(0.92);
+  transition:
+    opacity  0.6s var(--ease-expo),
+    transform 0.6s var(--ease-expo);
+}
+.scale-in.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ─── Stagger Delay Helpers ──────────────────────────────────*/
+/* Apply to siblings to cascade their reveal */
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
+.delay-4 { transition-delay: 0.4s; }
+.delay-5 { transition-delay: 0.5s; }
+.delay-6 { transition-delay: 0.6s; }
+
+/* ─── Selection & Scrollbar ──────────────────────────────────*/
+::selection {
+  background: var(--blue);
+  color: white;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--blue-xlight);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--blue-mid);
+  border-radius: 999px;
+}
+
+/* ─── Micro-interactions — Button shimmer ────────────────────*/
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -120%;
+  width: 60%; height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    rgba(255,255,255,0.22) 50%,
+    transparent 80%
+  );
+  transform: skewX(-20deg);
+}
+.btn-shimmer:hover::after {
+  animation: shimmer-sweep 0.6s ease forwards;
+}
+@keyframes shimmer-sweep {
+  from { left: -120%; }
+  to   { left: 160%;  }
+}
+
+/* ─── Micro-interactions — Cards ─────────────────────────────*/
+[data-card] {
+  transition:
+    transform   0.25s var(--ease-expo),
+    box-shadow  0.25s var(--ease-expo),
+    border-color 0.25s ease;
+}
+[data-card]:hover {
+  transform: translateY(-4px);
+  border-color: rgba(21,120,229,0.3) !important;
+}
+
+/* ─── Micro-interactions — Images ────────────────────────────*/
+.img-hover-zoom { overflow: hidden; border-radius: inherit; }
+.img-hover-zoom img {
+  transition: transform 0.5s var(--ease-expo);
+  will-change: transform;
+}
+.img-hover-zoom:hover img { transform: scale(1.04); }
+
+/* ─── Nav link underline slide-in ───────────────────────────*/
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 2px;
+  background: var(--blue);
+  border-radius: 999px;
+  transition: width 0.22s var(--ease-expo);
+}
+.nav-link:hover::after { width: 100%; }
+
+/* ─── Section entrance utilities ─────────────────────────────*/
+.reveal-clip {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.9s var(--ease-expo);
+}
+.reveal-clip.is-visible { clip-path: inset(0 0% 0 0); }
+
+.reveal-text {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s var(--ease-expo);
+  transition-delay: 0.1s;
+}
+.reveal-text.is-visible { opacity: 1; transform: translateY(0); }
+
+.stagger-children > * {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.55s ease, transform 0.55s var(--ease-expo);
+}
+.stagger-children.is-visible > *:nth-child(1) { transition-delay: 0.00s; }
+.stagger-children.is-visible > *:nth-child(2) { transition-delay: 0.08s; }
+.stagger-children.is-visible > *:nth-child(3) { transition-delay: 0.16s; }
+.stagger-children.is-visible > *:nth-child(4) { transition-delay: 0.24s; }
+.stagger-children.is-visible > *:nth-child(5) { transition-delay: 0.32s; }
+.stagger-children.is-visible > *:nth-child(6) { transition-delay: 0.40s; }
+.stagger-children.is-visible > * { opacity: 1; transform: translateY(0); }
+
+/* ─── Lazy-load fade-in ──────────────────────────────────────*/
+img[loading="lazy"] { opacity: 0; transition: opacity 0.6s ease; }
+img[loading="lazy"].loaded { opacity: 1; }
+
+/* ─── Prefers Reduced Motion ─────────────────────────────────*/
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration:        0.01ms !important;
+    animation-iteration-count: 1      !important;
+    transition-duration:       0.01ms !important;
+    scroll-behavior:           auto   !important;
+  }
+}
+
+/* ─── Custom cursor: hide default on desktop ─────────────────*/
+@media (pointer: fine) {
+  * { cursor: none !important; }
+}

@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Block search engines from indexing quote form submission state
+Disallow: /#quote
+
+Sitemap: https://jslcleaningservices.com/sitemap.xml
