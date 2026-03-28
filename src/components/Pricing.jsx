@@ -543,6 +543,29 @@ export default function Pricing() {
           </p>
         </div>
 
+        {/* ── CleanPass entry point ───────────────────── */}
+        <div style={{
+          textAlign: 'center', marginBottom: '2.5rem',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', flexWrap: 'wrap',
+        }}>
+          <span style={{ fontSize: '13px', color: 'var(--gray)', fontFamily: 'var(--font-body)' }}>
+            👑 Want these prices every time?
+          </span>
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent('jsl:open-membership', { detail: 'gold' }))}
+            style={{
+              background: 'none', border: 'none', padding: 0, cursor: 'pointer',
+              fontSize: '13px', fontWeight: 700, color: '#D97706',
+              fontFamily: 'var(--font-body)', textDecoration: 'underline',
+              textUnderlineOffset: '3px', transition: 'color 0.15s',
+            }}
+            onMouseEnter={e => e.currentTarget.style.color = '#92400E'}
+            onMouseLeave={e => e.currentTarget.style.color = '#D97706'}
+          >
+            Join CleanPass™ and save more →
+          </button>
+        </div>
+
         {/* ── Add-ons accordion ───────────────────────── */}
         <div ref={addonsRef} style={{ opacity: 0 }}>
           <AddonsAccordion />

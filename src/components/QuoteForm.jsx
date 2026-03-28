@@ -773,25 +773,36 @@ function SuccessScreen({ data, estimate }) {
         ))}
       </div>
 
-      {/* Contact */}
-      <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-        <a href="tel:3479546309" style={{
-          display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-          padding: '0.8rem 1.5rem', borderRadius: '999px',
-          background: BLUE, color: WHITE,
-          fontWeight: 700, fontSize: '14px', textDecoration: 'none',
-          boxShadow: '0 4px 16px rgba(21,120,229,0.35)',
-        }}>
-          📞 (347) 954-6309
-        </a>
-        <a href="mailto:jlopez@jslcleaningservices.com" style={{
-          display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-          padding: '0.8rem 1.5rem', borderRadius: '999px',
-          border: `2px solid ${BORDER}`, color: GRAY,
-          fontWeight: 600, fontSize: '14px', textDecoration: 'none',
-        }}>
-          ✉️ Send an Email
-        </a>
+      {/* CleanPass upsell */}
+      <div style={{
+        maxWidth: '420px', margin: '1.5rem auto 0',
+        padding: '1rem 1.25rem', borderRadius: '14px',
+        background: 'rgba(217,119,6,0.07)', border: '1.5px solid rgba(217,119,6,0.25)',
+        display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap',
+        justifyContent: 'center', textAlign: 'center',
+      }}>
+        <span style={{ fontSize: '20px' }}>👑</span>
+        <div style={{ flex: 1, minWidth: '160px' }}>
+          <p style={{ fontSize: '13px', color: '#92400E', fontFamily: "'DM Sans', sans-serif", margin: 0, fontWeight: 600 }}>
+            Did you know? CleanPass™ Gold members get <strong>10% off</strong> every clean.
+          </p>
+          <p style={{ fontSize: '12px', color: '#B45309', fontFamily: "'DM Sans', sans-serif", margin: '2px 0 0', opacity: 0.8 }}>
+            Ask Josh about membership when he reaches out.
+          </p>
+        </div>
+        <button
+          onClick={() => window.dispatchEvent(new CustomEvent('jsl:open-membership', { detail: 'gold' }))}
+          style={{
+            padding: '0.5rem 1.1rem', borderRadius: '999px', fontSize: '12px',
+            fontWeight: 700, fontFamily: "'DM Sans', sans-serif", cursor: 'pointer',
+            background: '#D97706', border: 'none', color: '#fff',
+            whiteSpace: 'nowrap', transition: 'transform 0.15s',
+          }}
+          onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.04)'}
+          onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+        >
+          Learn More →
+        </button>
       </div>
     </motion.div>
   );

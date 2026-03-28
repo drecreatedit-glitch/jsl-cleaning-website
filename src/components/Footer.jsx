@@ -22,7 +22,7 @@ const NAV_COLS = [
   },
   {
     heading: 'Company',
-    links: ['About JSL', 'Reviews', 'FAQ', 'Contact', 'Book a Service'],
+    links: ['About JSL', 'Reviews', 'FAQ', 'Contact', 'Book a Service', '👑 CleanPass™'],
   },
 ];
 
@@ -53,10 +53,11 @@ const IconGoogle = () => (
 );
 
 /* ─── Reusable footer link ───────────────────────────────── */
-const FootLink = ({ children }) => (
+const FootLink = ({ children, onClick }) => (
   <li>
     <a
       href="#"
+      onClick={onClick ? (e) => { e.preventDefault(); onClick(); } : undefined}
       style={{
         color: 'rgba(255,255,255,0.45)',
         textDecoration: 'none',
@@ -73,7 +74,7 @@ const FootLink = ({ children }) => (
   </li>
 );
 
-export default function Footer({ openLegal = () => {} }) {
+export default function Footer({ openLegal = () => {}, openMembership = () => {} }) {
   const footerRef = useRef(null);
   const colRefs   = useRef([]);
 
@@ -220,7 +221,12 @@ export default function Footer({ openLegal = () => {} }) {
                 gap: '0.65rem',
               }}>
                 {col.links.map(link => (
-                  <FootLink key={link}>{link}</FootLink>
+                  <FootLink
+                    key={link}
+                    onClick={link.includes('CleanPass') ? () => openMembership('gold') : undefined}
+                  >
+                    {link}
+                  </FootLink>
                 ))}
               </ul>
             </div>
