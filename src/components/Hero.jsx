@@ -378,28 +378,28 @@ export default function Hero() {
               </a>
             </div>
 
+            {/* Trust Pills */}
             {/* CleanPass entry point */}
-            <div style={{ marginBottom: '2rem' }}>
+            <div style={{ marginBottom: '1.5rem', opacity: 0 }} ref={pillsRef}>
               <button
                 onClick={() => window.dispatchEvent(new CustomEvent('jsl:open-membership', { detail: 'gold' }))}
                 style={{
                   background: 'none', border: 'none', padding: 0, cursor: 'pointer',
-                  display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                  color: 'rgba(255,255,255,0.65)', fontSize: '14px',
-                  fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
-                  transition: 'color 0.2s',
+                  color: '#D97706', fontSize: '14px', fontWeight: 700,
+                  fontFamily: "'DM Sans', sans-serif", letterSpacing: '-0.2px',
+                  display: 'flex', alignItems: 'center', gap: '0.4rem',
+                  transition: 'opacity 0.2s',
+                  textShadow: '0 1px 8px rgba(0,0,0,0.4)',
                 }}
-                onMouseEnter={e => e.currentTarget.style.color = '#D97706'}
-                onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.65)'}
+                onMouseEnter={e => e.currentTarget.style.opacity = '0.8'}
+                onMouseLeave={e => e.currentTarget.style.opacity = '1'}
               >
-                <span style={{ fontSize: '13px' }}>👑</span>
-                Or join CleanPass™ for ongoing member rates →
+                👑 Or join CleanPass™ for ongoing member rates →
               </button>
             </div>
 
-            {/* Trust Pills */}
+            {/* Trust Pills (moved to separate ref below) */}
             <div
-              ref={pillsRef}
               style={{
                 display: 'flex',
                 flexWrap: 'wrap',

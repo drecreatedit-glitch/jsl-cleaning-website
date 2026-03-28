@@ -543,32 +543,44 @@ export default function Pricing() {
           </p>
         </div>
 
-        {/* ── CleanPass entry point ───────────────────── */}
+        {/* ── Add-ons accordion ───────────────────────── */}
+        <div ref={addonsRef} style={{ opacity: 0, marginBottom: '2.5rem' }}>
+          <AddonsAccordion />
+        </div>
+
+        {/* ── CleanPass entry point ────────────────────── */}
         <div style={{
-          textAlign: 'center', marginBottom: '2.5rem',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', flexWrap: 'wrap',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          flexWrap: 'wrap', gap: '1rem',
+          padding: '1.35rem 2rem', borderRadius: '16px',
+          background: 'rgba(217,119,6,0.07)',
+          border: '2px solid rgba(217,119,6,0.25)',
         }}>
-          <span style={{ fontSize: '13px', color: 'var(--gray)', fontFamily: 'var(--font-body)' }}>
-            👑 Want these prices every time?
-          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+            <span style={{ fontSize: '26px' }}>👑</span>
+            <div>
+              <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '16px', color: '#92400E', letterSpacing: '-0.3px' }}>
+                Want these prices every time?
+              </div>
+              <div style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: 'var(--gray)', marginTop: '2px' }}>
+                CleanPass™ members save 5–15% on <em>every</em> clean — plus free add-ons, rate locks, and priority scheduling.
+              </div>
+            </div>
+          </div>
           <button
             onClick={() => window.dispatchEvent(new CustomEvent('jsl:open-membership', { detail: 'gold' }))}
             style={{
-              background: 'none', border: 'none', padding: 0, cursor: 'pointer',
-              fontSize: '13px', fontWeight: 700, color: '#D97706',
-              fontFamily: 'var(--font-body)', textDecoration: 'underline',
-              textUnderlineOffset: '3px', transition: 'color 0.15s',
+              padding: '0.75rem 1.5rem', borderRadius: '999px', flexShrink: 0,
+              background: '#D97706', border: 'none', color: '#fff',
+              fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '14px',
+              cursor: 'pointer', boxShadow: '0 4px 16px rgba(217,119,6,0.3)',
+              transition: 'transform 0.15s, box-shadow 0.15s', whiteSpace: 'nowrap',
             }}
-            onMouseEnter={e => e.currentTarget.style.color = '#92400E'}
-            onMouseLeave={e => e.currentTarget.style.color = '#D97706'}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.04)'; e.currentTarget.style.boxShadow = '0 6px 24px rgba(217,119,6,0.45)'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(217,119,6,0.3)'; }}
           >
             Join CleanPass™ and save more →
           </button>
-        </div>
-
-        {/* ── Add-ons accordion ───────────────────────── */}
-        <div ref={addonsRef} style={{ opacity: 0 }}>
-          <AddonsAccordion />
         </div>
 
       </div>

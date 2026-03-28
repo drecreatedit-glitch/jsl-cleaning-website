@@ -22,7 +22,7 @@ const NAV_COLS = [
   },
   {
     heading: 'Company',
-    links: ['About JSL', 'Reviews', 'FAQ', 'Contact', 'Book a Service', '👑 CleanPass™'],
+    links: ['About JSL', 'Reviews', 'FAQ', 'Contact', 'Book a Service', '👑 CleanPass™ Membership'],
   },
 ];
 
@@ -59,22 +59,23 @@ const FootLink = ({ children, onClick }) => (
       href="#"
       onClick={onClick ? (e) => { e.preventDefault(); onClick(); } : undefined}
       style={{
-        color: 'rgba(255,255,255,0.45)',
+        color: children?.toString().includes('CleanPass') ? '#D97706' : 'rgba(255,255,255,0.45)',
         textDecoration: 'none',
         fontSize: '14px',
         lineHeight: 1.5,
         transition: 'color 0.18s ease',
         display: 'inline-block',
+        fontWeight: children?.toString().includes('CleanPass') ? 700 : 400,
       }}
-      onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.9)'}
-      onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.45)'}
+      onMouseEnter={e => e.currentTarget.style.color = children?.toString().includes('CleanPass') ? '#F59E0B' : 'rgba(255,255,255,0.9)'}
+      onMouseLeave={e => e.currentTarget.style.color = children?.toString().includes('CleanPass') ? '#D97706' : 'rgba(255,255,255,0.45)'}
     >
       {children}
     </a>
   </li>
 );
 
-export default function Footer({ openLegal = () => {}, openMembership = () => {} }) {
+export default function Footer({ openLegal = () => {} }) {
   const footerRef = useRef(null);
   const colRefs   = useRef([]);
 
