@@ -6,33 +6,33 @@ gsap.registerPlugin(ScrollTrigger);
 
 /* ─── Data ───────────────────────────────────────────────── */
 const STATS = [
-  { value: 500,  suffix: '+', label: 'Happy Clients',          duration: 1.8, decimals: 0 },
-  { value: 5.0,  suffix: '★', label: 'Google Rating',          duration: 1.2, decimals: 1 },
-  { value: 6,    suffix: '',  label: 'Service Types',           duration: 0.8, decimals: 0 },
-  { value: 100,  suffix: '%', label: 'Satisfaction Guarantee',  duration: 2.0, decimals: 0 },
+  { value: 18,   suffix: '+', label: 'Google Reviews',          duration: 1.4, decimals: 0 },
+  { value: 5.0,  suffix: '★', label: 'Google Rating',           duration: 1.2, decimals: 1 },
+  { value: 6,    suffix: '',  label: 'Service Types',            duration: 0.8, decimals: 0 },
+  { value: 100,  suffix: '%', label: 'Satisfaction Guarantee',   duration: 2.0, decimals: 0 },
 ];
 
 const TESTIMONIALS = [
   {
     stars: 5,
-    quote: 'JSL completely transformed our office. Professional, thorough, and always on time. We\'ve been using them for over a year.',
-    name: 'Marcus T.',
-    location: 'Brickell, Miami',
+    quote: 'I recently hired JSL Cleaning for a deep cleaning of my home, and I couldn\'t be more satisfied. Josh arrived exactly on time, he was extremely polite, and treated my home with great care. He paid attention to the small details — dusting baseboards, cleaning behind appliances, and leaving the bathrooms spotless.',
+    name: 'Molove',
+    location: 'Google Review',
+    tag: 'Deep Clean',
+  },
+  {
+    stars: 5,
+    quote: 'JSL cleaning is amazing! They keep our medical office so clean and smelling amazing. They clean from top to bottom and leave it so much cleaner than before. They are reliable and responsive every time!!! Don\'t pass them up they truly stand out above the rest.',
+    name: 'K Mich',
+    location: 'Google Review',
     tag: 'Commercial Client',
   },
   {
     stars: 5,
-    quote: 'Best Airbnb cleaning service I\'ve found. My guests always comment on how clean everything is. JSL keeps my ratings high.',
-    name: 'Priya M.',
-    location: 'Tampa Bay',
-    tag: 'Airbnb Host',
-  },
-  {
-    stars: 5,
-    quote: 'The move-out clean was phenomenal. Landlord said it was one of the cleanest he\'d seen in years. Got my full deposit back.',
-    name: 'Devon A.',
-    location: 'Doral, FL',
-    tag: 'Move-Out Clean',
+    quote: 'I can\'t say enough good things about JSL Cleaning Services. As a busy mom of four, walking into a home that felt completely refreshed was such a gift. His attention to detail was outstanding, and the results were absolutely amazing.',
+    name: 'Cassandra Soto',
+    location: 'Google Review',
+    tag: 'Residential Client',
   },
 ];
 
@@ -367,7 +367,7 @@ export default function Stats() {
           style={{ textAlign: 'center', marginBottom: '2.75rem', opacity: 0 }}
         >
           <div className="eyebrow" style={{ color: 'var(--blue)', marginBottom: '0.75rem' }}>
-            Client Stories
+            Google Reviews
           </div>
           <h2 style={{
             color: '#fff',

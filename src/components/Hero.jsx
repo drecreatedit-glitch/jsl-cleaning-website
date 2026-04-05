@@ -298,7 +298,7 @@ export default function Hero() {
             </div>
 
             {/* H1 */}
-            <h1 style={{ marginBottom:'0.6rem', lineHeight: 1.02, fontSize: 'clamp(44px, 5vw, 78px)' }}>
+            <h1 style={{ marginBottom:'0.6rem', lineHeight: 1.02, fontSize: 'clamp(42px, 10vw, 78px)' }}>
               <span
                 ref={line1Ref}
                 style={{
