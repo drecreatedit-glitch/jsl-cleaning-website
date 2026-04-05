@@ -4,389 +4,572 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* ─── Trust pills data ───────────────────────────────────── */
+/* ─── Trust pills data ────────────────────────────────────── */
 const TRUST_PILLS = [
   { icon: '🛡️', label: 'Fully Insured' },
   { icon: '🧴', label: 'Supplies Included' },
   { icon: '🌿', label: 'Eco-Friendly' },
-  { icon: '💰', label: 'Recurring Discounts' },
+  { icon: '⏱️', label: 'Quote Ready in 2 Hours' },
 ];
 
-export default function Hero() {
-  /* refs ─ DOM */
-  const sectionRef     = useRef(null);
-  const bgImageRef     = useRef(null);
-  const orb1Ref        = useRef(null);
-  const orb2Ref        = useRef(null);
-  const orb3Ref        = useRef(null);
-  const eyebrowRef     = useRef(null);
-  const line1Ref       = useRef(null);
-  const line2Ref       = useRef(null);
-  const taglineRef     = useRef(null);
-  const bodyCopyRef    = useRef(null);
-  const buttonsRef     = useRef(null);
-  const pillsRef       = useRef(null);
-  const floatingCardRef= useRef(null);
-  const scrollArrowRef = useRef(null);
-  const progressRef    = useRef(null);
-  const headlineRef    = useRef(null);
+/* ═══════════════════════════════════════════════════════════
+   JSL HERO — Centered Immersive Layout
+   Background layers remain the same (flowers parallax),
+   content restructured to centered vertical stack with
+   floating social-proof elements.
+═══════════════════════════════════════════════════════════ */
 
-  /* ── Page‑load GSAP timeline ───────────────────────────── */
+export default function Hero() {
+  /* ── Refs ─────────────────────────────────────────────── */
+  const sectionRef    = useRef(null);
+  const flowersRef    = useRef(null);
+  const overlayRef    = useRef(null);
+  const petalsRef     = useRef(null);
+  const orbARef       = useRef(null);
+  const orbBRef       = useRef(null);
+  const orbCRef       = useRef(null);
+  const floatPetARef  = useRef(null);
+  const floatPetBRef  = useRef(null);
+  const contentRef    = useRef(null);
+
+  /* ── Text refs for staggered entrance ─────────────────── */
+  const eyebrowRef      = useRef(null);
+  const line1Ref        = useRef(null);
+  const line2Ref        = useRef(null);
+  const taglineRef      = useRef(null);
+  const bodyCopyRef     = useRef(null);
+  const buttonsRef      = useRef(null);
+  const pillsRef        = useRef(null);
+
+  const locationBadgeRef = useRef(null);
+  const statsRowRef     = useRef(null);
+  const scrollArrowRef  = useRef(null);
+  const progressRef     = useRef(null);
+
+  /* ══════════════════════════════════════════════════════
+     PAGE-LOAD ENTRANCE ANIMATIONS
+  ══════════════════════════════════════════════════════ */
   useEffect(() => {
     const ctx = gsap.context(() => {
 
-      /* 1 — Background image */
-      gsap.fromTo(bgImageRef.current,
-        { opacity: 0, scale: 1.05 },
-        { opacity: 1, scale: 1, duration: 0.8, ease: 'power2.out' }
+      /* Layer 2 — flowers bloom in */
+      gsap.fromTo(flowersRef.current,
+        { opacity: 0, scale: 1.06 },
+        { opacity: 1, scale: 1, duration: 3, ease: 'power2.out' }
       );
 
-      /* 2 — Eyebrow */
+      /* Layer 4 — petals drift in from right */
+      gsap.fromTo(petalsRef.current,
+        { opacity: 0, x: 60 },
+        { opacity: 0.45, x: 0, duration: 3, ease: 'power2.out', delay: 0.4 }
+      );
+
+      /* Layer 5 — Orbs drift in from off-canvas */
+      gsap.fromTo(orbARef.current,
+        { x: -200, opacity: 0 },
+        { x: 0, opacity: 1, duration: 3, ease: 'power2.out', delay: 0.2 }
+      );
+      gsap.fromTo(orbBRef.current,
+        { x: 200, opacity: 0 },
+        { x: 0, opacity: 1, duration: 3, ease: 'power2.out', delay: 0.3 }
+      );
+      gsap.fromTo(orbCRef.current,
+        { opacity: 0, scale: 0.5 },
+        { opacity: 1, scale: 1, duration: 3, ease: 'power2.out', delay: 0.5 }
+      );
+      gsap.fromTo(floatPetARef.current,
+        { x: -150, opacity: 0, rotation: -15 },
+        { x: 0, opacity: 1, rotation: 0, duration: 3, ease: 'power2.out', delay: 0.6 }
+      );
+      gsap.fromTo(floatPetBRef.current,
+        { x: 150, opacity: 0, rotation: 15 },
+        { x: 0, opacity: 1, rotation: 0, duration: 3, ease: 'power2.out', delay: 0.7 }
+      );
+
+      /* Layer 6 — Copy stagger */
       gsap.fromTo(eyebrowRef.current,
         { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out', delay: 0.3 }
+        { opacity: 1, y: 0, duration: 3, ease: 'power2.out', delay: 0.6 }
       );
-
-      /* 3 — H1 line 1 — clip path left→right */
       gsap.fromTo(line1Ref.current,
         { clipPath: 'inset(0 100% 0 0)', opacity: 1 },
-        { clipPath: 'inset(0 0% 0 0)', duration: 0.6, ease: 'power3.out', delay: 0.5 }
+        { clipPath: 'inset(0 0% 0 0)', duration: 3, ease: 'power2.out', delay: 0.75 }
       );
-
-      /* 4 — H1 line 2 — clip path left→right */
       gsap.fromTo(line2Ref.current,
         { clipPath: 'inset(0 100% 0 0)', opacity: 1 },
-        { clipPath: 'inset(0 0% 0 0)', duration: 0.6, ease: 'power3.out', delay: 0.7 }
+        { clipPath: 'inset(0 0% 0 0)', duration: 3, ease: 'power2.out', delay: 0.9 }
       );
-
-      /* 5 — Tagline */
       gsap.fromTo(taglineRef.current,
-        { opacity: 0, y: 16 },
-        { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out', delay: 0.9 }
+        { opacity: 0 },
+        { opacity: 1, duration: 3, ease: 'power2.out', delay: 1.05 }
       );
-
-      /* 6 — Body copy */
       gsap.fromTo(bodyCopyRef.current,
-        { opacity: 0, y: 16 },
-        { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out', delay: 1.0 }
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 3, ease: 'power2.out', delay: 1.15 }
       );
-
-      /* 7 — Buttons */
-      gsap.fromTo(buttonsRef.current,
-        { opacity: 0, y: 16 },
-        { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out', delay: 1.1 }
+      gsap.fromTo(buttonsRef.current.children,
+        { opacity: 0, y: 15 },
+        { opacity: 1, y: 0, duration: 3, ease: 'power2.out', stagger: 0.1, delay: 1.25 }
       );
-
-      /* 8 — Trust pills stagger */
       if (pillsRef.current) {
-        gsap.fromTo(pillsRef.current.children,
-          { opacity: 0, y: 14, scale: 0.94 },
-          {
-            opacity: 1, y: 0, scale: 1,
-            duration: 0.3,
-            ease: 'power2.out',
-            stagger: 0.08,
-            delay: 1.2,
-          }
+        gsap.fromTo(Array.from(pillsRef.current.querySelectorAll('span, button')),
+          { opacity: 0, y: 10 },
+          { opacity: 1, y: 0, duration: 3, ease: 'power2.out', stagger: 0.08, delay: 1.35 }
         );
       }
 
-      /* 9 — Floating card */
-      gsap.fromTo(floatingCardRef.current,
-        { opacity: 0, x: 40, scale: 0.92 },
-        { opacity: 1, x: 0, scale: 1, duration: 0.6, ease: 'power3.out', delay: 1.3 }
+      /* Floating social proof cards */
+      gsap.fromTo(locationBadgeRef.current,
+        { opacity: 0, y: 40, scale: 0.9 },
+        { opacity: 1, y: 0, scale: 1, duration: 2.5, ease: 'power2.out', delay: 1.5 }
+      );
+      gsap.fromTo(statsRowRef.current,
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 2.5, ease: 'power2.out', delay: 1.6 }
       );
 
     }, sectionRef);
-
     return () => ctx.revert();
   }, []);
 
-  /* ── Scroll‑driven parallax via ScrollTrigger ──────────── */
+  /* ══════════════════════════════════════════════════════
+     SCROLL + MOUSE PARALLAX
+  ══════════════════════════════════════════════════════ */
   useEffect(() => {
     const ctx = gsap.context(() => {
       const section = sectionRef.current;
+      if (!section) return;
 
-      /* BG image — 0.4× speed */
-      gsap.to(bgImageRef.current, {
-        y: '40%',
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: true,
+      const st = { trigger: section, start: 'top top', end: 'bottom top', scrub: 2 };
+
+      /* Layer 2 — flowers: OPPOSING direction */
+      gsap.to(flowersRef.current, {
+        yPercent: 15, ease: 'none',
+        scrollTrigger: st,
+      });
+
+      /* Layer 3 — gradient: very subtle drift */
+      gsap.to(overlayRef.current, {
+        yPercent: -4, ease: 'none',
+        scrollTrigger: st,
+      });
+
+      /* Layer 4 — petals: FASTER than main image */
+      gsap.to(petalsRef.current, {
+        yPercent: -22, ease: 'none',
+        scrollTrigger: { ...st, scrub: 1 },
+      });
+
+      /* Layer 5 — orbs depth layers */
+      gsap.to(orbARef.current, {
+        yPercent: 8, ease: 'none',
+        scrollTrigger: st,
+      });
+      gsap.to(orbBRef.current, {
+        yPercent: 18, ease: 'none',
+        scrollTrigger: st,
+      });
+      gsap.to(orbCRef.current, {
+        yPercent: 28, ease: 'none',
+        scrollTrigger: { ...st, scrub: 1 },
+      });
+
+      /* Layer 5 — petal rotation on scroll */
+      gsap.to(floatPetARef.current, {
+        rotation: 20, yPercent: 22, ease: 'none',
+        scrollTrigger: { ...st, scrub: 1.5 },
+      });
+      gsap.to(floatPetBRef.current, {
+        rotation: -18, yPercent: 22, ease: 'none',
+        scrollTrigger: { ...st, scrub: 1.5 },
+      });
+
+      /* Orb B counter-rotation */
+      gsap.to(orbBRef.current, {
+        rotation: -15, ease: 'none',
+        scrollTrigger: { ...st, scrub: 2 },
+      });
+      gsap.to(orbCRef.current, {
+        rotation: 22, ease: 'none',
+        scrollTrigger: { ...st, scrub: 1 },
+      });
+
+      /* Layer 6 — text subtle upward pull */
+      gsap.to(contentRef.current, {
+        yPercent: -4, ease: 'none',
+        scrollTrigger: { ...st, scrub: 2 },
+      });
+
+      /* Floating cards — gentle float on scroll */
+      gsap.to(locationBadgeRef.current, {
+        yPercent: -15, ease: 'none',
+        scrollTrigger: { ...st, scrub: 3 },
+      });
+
+      /* Scroll arrow fade */
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'top top',
+        end: '120px top',
+        onUpdate: (self) => {
+          if (scrollArrowRef.current) {
+            gsap.to(scrollArrowRef.current, { opacity: 1 - self.progress, duration: 0.1 });
+          }
         },
       });
 
-      /* Orbs — 0.2× speed */
-      [orb1Ref, orb2Ref, orb3Ref].forEach((orbRef, i) => {
-        gsap.to(orbRef.current, {
-          y: `${20 + i * 8}%`,
+      /* Progress bar */
+      if (progressRef.current) {
+        gsap.to(progressRef.current, {
+          scaleX: 1,
           ease: 'none',
           scrollTrigger: {
-            trigger: section,
+            trigger: document.body,
             start: 'top top',
-            end: 'bottom top',
+            end: 'bottom bottom',
             scrub: true,
           },
         });
-      });
+      }
 
-      /* Headline — subtle upward pull (-0.05×) */
-      gsap.to(headlineRef.current, {
-        y: '-5%',
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: true,
-        },
-      });
+      /* ── Mouse Parallax — desktop only ─ */
+      const mm = gsap.matchMedia();
+      mm.add('(min-width: 769px)', () => {
+        const onMouseMove = (e) => {
+          const { clientX: mx, clientY: my } = e;
+          const cx = window.innerWidth  / 2;
+          const cy = window.innerHeight / 2;
+          const dx = (mx - cx) / cx;
+          const dy = (my - cy) / cy;
 
-      /* Floating card — drifts down (0.15×) */
-      gsap.to(floatingCardRef.current, {
-        y: '15%',
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: true,
-        },
-      });
-
-      /* Scroll arrow — fade out after 100px scroll */
-      ScrollTrigger.create({
-        trigger: document.body,
-        start: 'top top',
-        end: '100px top',
-        onUpdate: (self) => {
-          gsap.to(scrollArrowRef.current, {
-            opacity: 1 - self.progress,
-            duration: 0.1,
+          gsap.to(flowersRef.current, {
+            x:  dx * 8, y: dy * 5,
+            duration: 0.4, ease: 'power2.out', overwrite: 'auto',
           });
-        },
+          gsap.to(petalsRef.current, {
+            x: -dx * 14, y: -dy * 10,
+            duration: 0.4, ease: 'power2.out', overwrite: 'auto',
+          });
+          gsap.to(contentRef.current, {
+            x: dx * 3, y: dy * 2,
+            duration: 0.5, ease: 'power2.out', overwrite: 'auto',
+          });
+          /* Floating cards react to mouse — opposite direction for depth */
+          gsap.to(locationBadgeRef.current, {
+            x: -dx * 8, y: -dy * 6,
+            duration: 0.7, ease: 'power2.out', overwrite: 'auto',
+          });
+        };
+
+        window.addEventListener('mousemove', onMouseMove, { passive: true });
+        return () => window.removeEventListener('mousemove', onMouseMove);
       });
 
-      /* Progress bar — full-page width 0→100% */
-      gsap.to(progressRef.current, {
-        scaleX: 1,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: document.body,
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: true,
-        },
-      });
-
+      return () => mm.revert();
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
+  /* ══════════════════════════════════════════════════════
+     JSX
+  ══════════════════════════════════════════════════════ */
   return (
     <>
-      {/* ── Scroll Progress Bar ──────────────────────────── */}
+      {/* ── Scroll Progress Bar ──────────────────────────────── */}
       <div
         ref={progressRef}
         style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '3px',
+          position: 'fixed', top: 0, left: 0,
+          width: '100%', height: '3px',
           background: 'var(--blue)',
-          transformOrigin: 'left center',
-          scaleX: 0,
+          transformOrigin: 'left center', scaleX: 0,
           zIndex: 9999,
           boxShadow: '0 0 12px rgba(21,120,229,0.8)',
         }}
       />
 
-      {/* ── Hero Section ─────────────────────────────────── */}
+      {/* ── Hero Section ─────────────────────────────────────── */}
       <section
         ref={sectionRef}
         id="hero"
         style={{
           position: 'relative',
-          minHeight: '100vh',
-          background: 'var(--dark)',
+          minHeight: '120vh',
+          background: '#0D2B1A',
           display: 'flex',
           alignItems: 'center',
+          justifyContent: 'center',
+          overflow: 'hidden',
         }}
       >
 
-        {/* ── BG Image — Layer 1 ──────────────────────── */}
-        <div
-          ref={bgImageRef}
+        {/* ═══ LAYER 2 — hero-flowers.webp ═══ */}
+        <img
+          ref={flowersRef}
+          src="/images/hero-flowers.webp"
+          alt=""
+          aria-hidden="true"
           style={{
             position: 'absolute',
-            inset: '-20% 0',
-            backgroundImage: 'url(https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1600&q=80)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            filter: 'brightness(0.18)',
+            top: '-25%',
+            left: 0,
+            width: '100%',
+            height: '150%',
+            objectFit: 'cover',
+            objectPosition: 'center 55%',
+            willChange: 'transform, opacity',
+            pointerEvents: 'none',
+            userSelect: 'none',
+            display: 'block',
+          }}
+        />
+
+        {/* ═══ LAYER 3 — Gradient overlay ═══ */}
+        <div
+          ref={overlayRef}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: `linear-gradient(180deg,
+              rgba(13,43,26,0.92) 0%,
+              rgba(13,43,26,0.75) 18%,
+              rgba(11,18,32,0.65) 45%,
+              rgba(11,18,32,0.78) 75%,
+              rgba(11,18,32,0.92) 100%
+            )`,
+            pointerEvents: 'none',
+            zIndex: 1,
             willChange: 'transform',
           }}
         />
 
-        {/* ── Blue Orbs — Layer 2 ─────────────────────── */}
-        {/* Orb 1 — top right */}
-        <div ref={orb1Ref} style={{
-          position: 'absolute', top: '-10%', right: '-5%',
-          width: '600px', height: '600px',
-          background: 'radial-gradient(circle, rgba(21,120,229,0.15) 0%, transparent 70%)',
-          filter: 'blur(80px)',
-          willChange: 'transform',
-          pointerEvents: 'none',
-        }} />
-        {/* Orb 2 — bottom left */}
-        <div ref={orb2Ref} style={{
-          position: 'absolute', bottom: '-15%', left: '-10%',
-          width: '700px', height: '700px',
-          background: 'radial-gradient(circle, rgba(21,120,229,0.10) 0%, transparent 70%)',
-          filter: 'blur(80px)',
-          willChange: 'transform',
-          pointerEvents: 'none',
-        }} />
-        {/* Orb 3 — center */}
-        <div ref={orb3Ref} style={{
-          position: 'absolute', top: '30%', left: '35%',
-          width: '500px', height: '500px',
-          background: 'radial-gradient(circle, rgba(21,120,229,0.08) 0%, transparent 70%)',
-          filter: 'blur(80px)',
-          willChange: 'transform',
-          pointerEvents: 'none',
-        }} />
+        {/* ═══ LAYER 4 — hero-petals.webp ═══ */}
+        <img
+          ref={petalsRef}
+          src="/images/hero-petals.webp"
+          alt=""
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            top: '-30%',
+            left: 0,
+            width: '100%',
+            height: '160%',
+            objectFit: 'cover',
+            mixBlendMode: 'screen',
+            willChange: 'transform, opacity',
+            pointerEvents: 'none',
+            userSelect: 'none',
+            display: 'block',
+            zIndex: 2,
+          }}
+        />
 
-        {/* ── Content container ───────────────────────── */}
-        <div className="container-xl" style={{
-          position: 'relative',
-          zIndex: 10,
-          display: 'grid',
-          gridTemplateColumns: '1fr auto',
-          gap: '3rem',
-          alignItems: 'center',
-          paddingTop: '6rem',
-          paddingBottom: '6rem',
-        }}>
+        {/* ═══ LAYER 5 — Floating orbs + petals ═══ */}
+        <div style={{ position: 'absolute', inset: 0, zIndex: 3, pointerEvents: 'none' }}>
+          <div ref={orbARef} style={{
+            position: 'absolute',
+            top: '-80px', left: '-40px',
+            width: 300, height: 300,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(21,120,229,0.18) 0%, rgba(21,120,229,0.06) 50%, transparent 70%)',
+            willChange: 'transform, opacity',
+          }} />
+          <div ref={orbBRef} style={{
+            position: 'absolute',
+            bottom: '15%', right: '-20px',
+            width: 160, height: 160,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(21,120,229,0.15) 0%, transparent 70%)',
+            willChange: 'transform, opacity',
+          }} />
+          <div ref={orbCRef} style={{
+            position: 'absolute',
+            top: '40%', right: '25%',
+            width: 80, height: 80,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(21,120,229,0.22) 0%, transparent 70%)',
+            willChange: 'transform, opacity',
+          }} />
+          <svg
+            ref={floatPetARef}
+            aria-hidden="true"
+            viewBox="0 0 60 60"
+            width={48} height={48}
+            fill="none"
+            style={{
+              position: 'absolute',
+              left: '8%', top: '25%',
+              opacity: 0,
+              willChange: 'transform, opacity',
+            }}
+          >
+            <path
+              d="M30 4 C38 10, 50 22, 48 36 C46 48, 38 56, 30 56 C22 56, 14 48, 12 36 C10 22, 22 10, 30 4Z"
+              fill="rgba(255,255,255,0.20)"
+            />
+          </svg>
+          <svg
+            ref={floatPetBRef}
+            aria-hidden="true"
+            viewBox="0 0 60 60"
+            width={32} height={32}
+            fill="none"
+            style={{
+              position: 'absolute',
+              right: '12%', top: '60%',
+              opacity: 0,
+              willChange: 'transform, opacity',
+            }}
+          >
+            <path
+              d="M30 4 C38 10, 50 22, 48 36 C46 48, 38 56, 30 56 C22 56, 14 48, 12 36 C10 22, 22 10, 30 4Z"
+              fill="rgba(255,255,255,0.16)"
+            />
+          </svg>
+        </div>
 
-          {/* ─ Left column ─────────────────────────────── */}
-          <div ref={headlineRef} style={{ maxWidth: '780px' }}>
+        {/* ═══ LAYER 6 — Hero content (RESTRUCTURED CENTER LAYOUT) ═══ */}
+        <div
+          ref={contentRef}
+          style={{
+            position: 'relative',
+            zIndex: 10,
+            width: '100%',
+            maxWidth: '1280px',
+            margin: '0 auto',
+            paddingLeft: 'clamp(1rem, 4vw, 2rem)',
+            paddingRight: 'clamp(1rem, 4vw, 2rem)',
+            paddingTop: '10rem',
+            paddingBottom: '8rem',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            textAlign: 'center',
+            willChange: 'transform',
+          }}
+        >
 
-            {/* Eyebrow */}
-            <div
-              ref={eyebrowRef}
-              className="eyebrow"
+          {/* Eyebrow */}
+          <div
+            ref={eyebrowRef}
+            className="eyebrow"
+            style={{
+              opacity: 0,
+              marginBottom: '1.25rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              color: '#fff',
+              textShadow: '0 2px 12px rgba(0,0,0,0.6)',
+            }}
+          >
+            <span style={{ display:'inline-block', width:'28px', height:'1px', background:'rgba(255,255,255,0.6)' }}/>
+            South Florida
+            <span style={{ display:'inline-block', width:'28px', height:'1px', background:'rgba(255,255,255,0.6)' }}/>
+          </div>
+
+          {/* H1 */}
+          <h1 style={{ marginBottom:'0.75rem', lineHeight: 1.02, fontSize: 'clamp(42px, 10vw, 88px)', letterSpacing: '-3px' }}>
+            <span
+              ref={line1Ref}
               style={{
-                opacity: 0,
-                marginBottom: '1.5rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
+                display: 'block',
+                color: 'var(--white)',
+                clipPath: 'inset(0 100% 0 0)',
+                willChange: 'clip-path',
+                textShadow: '0 4px 32px rgba(0,0,0,0.8), 0 1px 6px rgba(0,0,0,0.5)',
               }}
             >
-              <span style={{
-                display:'inline-block',
-                width:'20px', height:'1px',
-                background:'var(--blue)',
-              }}/>
-              South Florida &amp; Tampa Bay Area
-            </div>
-
-            {/* H1 */}
-            <h1 style={{ marginBottom:'0.6rem', lineHeight: 1.02, fontSize: 'clamp(42px, 10vw, 78px)' }}>
-              <span
-                ref={line1Ref}
-                style={{
-                  display: 'block',
-                  color: 'var(--white)',
-                  clipPath: 'inset(0 100% 0 0)',
-                  willChange: 'clip-path',
-                  textShadow: '0 2px 24px rgba(0,0,0,0.6)',
-                }}
-              >
-                Freshness You
-              </span>
-              <span
-                ref={line2Ref}
-                style={{
-                  display: 'block',
-                  color: 'var(--blue)',
-                  clipPath: 'inset(0 100% 0 0)',
-                  willChange: 'clip-path',
-                  textShadow: '0 2px 24px rgba(21,120,229,0.3)',
-                }}
-              >
-                Can Feel.
-              </span>
-            </h1>
-
-            {/* Tagline */}
-            <p
-              ref={taglineRef}
+              Freshness You
+            </span>
+            <span
+              ref={line2Ref}
               style={{
-                opacity: 0,
-                fontFamily: 'var(--font-display)',
-                fontVariant: 'small-caps',
-                fontSize: 'clamp(14px, 1.2vw, 18px)',
-                color: 'rgba(255,255,255,0.80)',
-                letterSpacing: '1.5px',
-                marginBottom: '1.25rem',
-                textShadow: '0 1px 8px rgba(0,0,0,0.5)',
+                display: 'block',
+                color: 'var(--blue)',
+                clipPath: 'inset(0 100% 0 0)',
+                willChange: 'clip-path',
+                textShadow: '0 4px 32px rgba(21,120,229,0.5), 0 1px 6px rgba(0,0,0,0.4)',
               }}
             >
-              A Fragrance You Can Trust
-            </p>
+              Can Feel.
+            </span>
+          </h1>
 
-            {/* Body copy */}
-            <p
-              ref={bodyCopyRef}
-              style={{
-                opacity: 0,
-                color: 'rgba(255,255,255,0.82)',
-                fontSize: '17px',
-                lineHeight: 1.7,
-                maxWidth: '500px',
-                marginBottom: '2.25rem',
-                textShadow: '0 1px 12px rgba(0,0,0,0.4)',
-              }}
-            >
-              Professional cleaning for homes and businesses —{' '}
-              done right, every time.
-            </p>
+          {/* Tagline */}
+          <div
+            ref={taglineRef}
+            style={{
+              opacity: 0,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              marginBottom: '1.5rem',
+            }}
+          >
+            <span style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.25)', maxWidth: '48px' }} />
+            <span style={{
+              fontFamily: "'Inter', sans-serif",
+              fontWeight: 600,
+              fontSize: '13px',
+              letterSpacing: '2.5px',
+              color: 'rgba(255,255,255,0.55)',
+              textTransform: 'uppercase',
+              whiteSpace: 'nowrap',
+              textShadow: '0 1px 8px rgba(0,0,0,0.5)',
+            }}>
+              Professional Cleaning You Can Count On
+            </span>
+            <span style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.25)', maxWidth: '48px' }} />
+          </div>
 
-            {/* CTA Buttons */}
-            <div
-              ref={buttonsRef}
-              style={{
-                opacity: 0,
-                display: 'flex',
-                gap: '1rem',
-                flexWrap: 'wrap',
-                marginBottom: '2.5rem',
-              }}
-            >
-              <a href="#pricing" className="btn btn-primary btn-lg">
-                Book a Service
-              </a>
-              <a href="#services" className="btn btn-ghost btn-lg">
-                Explore Services →
-              </a>
-            </div>
+          {/* Body copy */}
+          <p
+            ref={bodyCopyRef}
+            style={{
+              opacity: 0,
+              color: 'rgba(255,255,255,0.78)',
+              fontSize: '18px',
+              lineHeight: 1.7,
+              maxWidth: '540px',
+              marginBottom: '2.5rem',
+              textShadow: '0 1px 12px rgba(0,0,0,0.4)',
+            }}
+          >
+            Professional cleaning for homes and businesses —{' '}
+            done right, every time.
+          </p>
 
-            {/* Trust Pills */}
-            {/* CleanPass entry point */}
-            <div style={{ marginBottom: '1.5rem', opacity: 0 }} ref={pillsRef}>
+          {/* CTA Buttons — centered row */}
+          <div
+            ref={buttonsRef}
+            style={{
+              display: 'flex',
+              gap: '1rem',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              marginBottom: '2rem',
+            }}
+          >
+            <a href="#cta" className="btn btn-primary btn-lg">
+              Get a Free Quote
+            </a>
+            <a href="#services" className="btn btn-ghost btn-lg">
+              Explore Services →
+            </a>
+          </div>
+
+          {/* CleanPass + Trust Pills */}
+          <div ref={pillsRef} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ marginBottom: '1.25rem' }}>
               <button
                 onClick={() => window.dispatchEvent(new CustomEvent('jsl:open-membership', { detail: 'gold' }))}
                 style={{
                   background: 'none', border: 'none', padding: 0, cursor: 'pointer',
                   color: '#D97706', fontSize: '14px', fontWeight: 700,
-                  fontFamily: "'DM Sans', sans-serif", letterSpacing: '-0.2px',
+                  fontFamily: "'Inter', sans-serif", letterSpacing: '-0.2px',
                   display: 'flex', alignItems: 'center', gap: '0.4rem',
                   transition: 'opacity 0.2s',
                   textShadow: '0 1px 8px rgba(0,0,0,0.4)',
@@ -398,19 +581,11 @@ export default function Hero() {
               </button>
             </div>
 
-            {/* Trust Pills (moved to separate ref below) */}
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: '0.65rem',
-              }}
-            >
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.65rem', justifyContent: 'center' }}>
               {TRUST_PILLS.map((pill) => (
                 <span
                   key={pill.label}
                   style={{
-                    opacity: 0,
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '0.4rem',
@@ -431,113 +606,60 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* ─ Right column — Floating Card ─────────────── */}
-          <div
-            ref={floatingCardRef}
-            style={{
-              opacity: 0,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '1rem',
-              willChange: 'transform',
-            }}
-          >
-            {/* Main card */}
-            <div style={{
-              background: 'rgba(255,255,255,0.97)',
-              borderRadius: '20px',
-              padding: '2rem',
-              minWidth: '220px',
-              boxShadow: '0 20px 60px rgba(21,120,229,0.25), 0 4px 20px rgba(0,0,0,0.3)',
-              textAlign: 'center',
-            }}>
-              {/* Stars */}
-              <div style={{
-                fontSize: '22px',
-                letterSpacing: '2px',
-                marginBottom: '0.5rem',
-                color: '#F59E0B',
-              }}>
-                ★★★★★
-              </div>
-              <div style={{
-                fontFamily: 'var(--font-display)',
-                fontWeight: 800,
-                fontSize: '28px',
-                color: 'var(--dark)',
-                letterSpacing: '-1px',
-                lineHeight: 1,
-              }}>
-                5.0
-              </div>
-              <div style={{
-                fontSize: '13px',
-                fontWeight: 600,
-                color: 'var(--gray)',
-                marginBottom: '1rem',
-              }}>
-                Google Rating
-              </div>
-              <div style={{
-                background: 'var(--blue-light)',
-                borderRadius: '12px',
-                padding: '0.6rem 1rem',
-              }}>
-                <div style={{
-                  fontFamily: 'var(--font-display)',
-                  fontWeight: 800,
-                  fontSize: '22px',
-                  color: 'var(--blue)',
-                  letterSpacing: '-0.5px',
-                }}>
-                  500+
-                </div>
-                <div style={{
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  color: 'var(--gray)',
-                }}>
-                  Clients Served
-                </div>
-              </div>
-            </div>
+        </div>{/* /content */}
 
-            {/* Location badge card */}
-            <div style={{
-              background: 'rgba(255,255,255,0.10)',
-              border: '1px solid rgba(255,255,255,0.15)',
-              backdropFilter: 'blur(12px)',
-              WebkitBackdropFilter: 'blur(12px)',
-              borderRadius: '16px',
-              padding: '1rem 1.25rem',
+
+
+        {/* ═══ FLOATING SOCIAL PROOF — Location Badge (bottom-left) ═══ */}
+        <div
+          ref={locationBadgeRef}
+          style={{
+            position: 'absolute',
+            bottom: 'clamp(100px, 14vh, 160px)',
+            left: 'clamp(1.5rem, 5vw, 4rem)',
+            zIndex: 12,
+            opacity: 0,
+            willChange: 'transform',
+            pointerEvents: 'auto',
+          }}
+        >
+          <div style={{
+            background: 'rgba(255,255,255,0.10)',
+            border: '1px solid rgba(255,255,255,0.18)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            borderRadius: '16px',
+            padding: '1rem 1.5rem',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.75rem',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+          }}>
+            <span style={{
+              fontSize: '24px',
+              width: '44px',
+              height: '44px',
               display: 'flex',
               alignItems: 'center',
-              gap: '0.6rem',
-            }}>
-              <span style={{ fontSize: '20px' }}>📍</span>
-              <div>
-                <div style={{
-                  fontFamily: 'var(--font-display)',
-                  fontWeight: 700,
-                  fontSize: '13px',
-                  color: 'var(--white)',
-                  lineHeight: 1.2,
-                }}>
-                  South Florida
-                </div>
-                <div style={{
-                  fontSize: '12px',
-                  color: 'rgba(255,255,255,0.55)',
-                }}>
-                  &amp; Tampa Bay Area
-                </div>
+              justifyContent: 'center',
+              background: 'rgba(21,120,229,0.15)',
+              borderRadius: '12px',
+            }}>📍</span>
+            <div>
+              <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '14px', color: 'var(--white)', lineHeight: 1.2 }}>
+                South Florida
+              </div>
+              <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.55)' }}>
+                Serving Your Area
               </div>
             </div>
           </div>
+        </div>
 
-        </div>{/* /container-xl */}
+        {/* Stats ribbon hidden — ref kept for GSAP context safety */}
+        <div ref={statsRowRef} style={{ display: 'none' }} />
 
-        {/* ── Scroll Arrow ─────────────────────────────── */}
+        {/* ── Scroll Arrow ─────────────────────────────────── */}
         <div
           ref={scrollArrowRef}
           style={{
@@ -562,27 +684,33 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* ── Bottom fade vignette ─────────────────────── */}
+        {/* ── Bottom fade vignette ──────────────────────────── */}
         <div style={{
           position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
+          bottom: 0, left: 0, right: 0,
           height: '180px',
-          background: 'linear-gradient(to top, var(--dark) 0%, transparent 100%)',
+          background: 'linear-gradient(to top, #0B1220 0%, transparent 100%)',
           pointerEvents: 'none',
           zIndex: 5,
         }} />
 
-      </section>
+        {/* ── Responsive overrides ──────────────────────────── */}
+        <style>{`
+          @keyframes bounceArrow {
+            0%, 100% { transform: translateY(0); }
+            50%       { transform: translateY(8px); }
+          }
 
-      {/* ── Bounce keyframe ─────────────────────────────── */}
-      <style>{`
-        @keyframes bounceArrow {
-          0%, 100% { transform: translateY(0); }
-          50%       { transform: translateY(8px); }
-        }
-      `}</style>
+          /* Hide floating cards on mobile — they'd overlap text */
+          @media (max-width: 900px) {
+            #hero > div[style*="position: absolute"][style*="top: clamp"],
+            #hero > div[style*="position: absolute"][style*="bottom: clamp"] {
+              display: none !important;
+            }
+          }
+        `}</style>
+
+      </section>
     </>
   );
 }
