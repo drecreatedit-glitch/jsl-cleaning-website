@@ -84,9 +84,9 @@ html.lenis body {
 /* h1 — Hero headline */
 h1 {
   font-family: var(--font-display);
-  font-weight: 800;
+  font-weight: 700;
   font-size: clamp(48px, 5.5vw, 82px);
-  letter-spacing: -1.5px;
+  letter-spacing: -1px;
   line-height: 1.12;
   color: var(--dark);
 }
@@ -94,9 +94,9 @@ h1 {
 /* h2 — Section headlines */
 h2 {
   font-family: var(--font-display);
-  font-weight: 800;
+  font-weight: 700;
   font-size: clamp(32px, 3.8vw, 52px);
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
   line-height: 1.15;
   color: var(--dark);
 }

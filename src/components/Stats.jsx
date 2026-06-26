@@ -109,9 +109,9 @@ function StatItem({ stat, index, triggerRef }) {
         ref={numRef}
         style={{
           fontFamily: 'var(--font-display)',
-          fontWeight: 800,
+          fontWeight: 700,
           fontSize: 'clamp(40px, 4vw, 58px)',
-          letterSpacing: '-2px',
+          letterSpacing: '-0.5px',
           color: '#fff',
           lineHeight: 1,
           marginBottom: '0.6rem',
