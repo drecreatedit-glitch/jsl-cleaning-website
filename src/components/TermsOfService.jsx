@@ -5,7 +5,7 @@ const GRAY = '#5A6A82';
 const Section = ({ title, children }) => (
   <section style={{ marginBottom: '2rem' }}>
     <h3 style={{
-      fontFamily: "'Syne', sans-serif",
+      fontFamily: "'Plus Jakarta Sans', sans-serif",
       fontWeight: 800, fontSize: '16px',
       color: DARK, marginBottom: '0.6rem',
       paddingBottom: '0.4rem',

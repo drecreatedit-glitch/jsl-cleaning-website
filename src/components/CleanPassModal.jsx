@@ -45,7 +45,7 @@ function StepDots({ step }) {
 function Step1({ selectedTierId, onSelect }) {
   return (
     <div>
-      <h3 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: '20px', color: DARK, marginBottom: '0.4rem', letterSpacing: '-0.5px' }}>
+      <h3 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: '20px', color: DARK, marginBottom: '0.4rem', letterSpacing: '-0.5px' }}>
         Choose your CleanPass™ plan
       </h3>
       <p style={{ fontSize: '14px', color: GRAY, marginBottom: '1.5rem', fontFamily: "'DM Sans', sans-serif" }}>
@@ -123,7 +123,7 @@ function Step2({ data, onChange, errors }) {
 
   return (
     <div>
-      <h3 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: '20px', color: DARK, marginBottom: '0.4rem', letterSpacing: '-0.5px' }}>
+      <h3 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: '20px', color: DARK, marginBottom: '0.4rem', letterSpacing: '-0.5px' }}>
         Your contact details
       </h3>
       <p style={{ fontSize: '14px', color: GRAY, marginBottom: '1.5rem', fontFamily: "'DM Sans', sans-serif" }}>
@@ -171,7 +171,7 @@ function Step3({ data, tier, consentChecked, setConsentChecked }) {
 
   return (
     <div>
-      <h3 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: '20px', color: DARK, marginBottom: '0.4rem', letterSpacing: '-0.5px' }}>
+      <h3 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: '20px', color: DARK, marginBottom: '0.4rem', letterSpacing: '-0.5px' }}>
         Confirm your enrollment
       </h3>
       <p style={{ fontSize: '14px', color: GRAY, marginBottom: '1.25rem', fontFamily: "'DM Sans', sans-serif" }}>
@@ -184,7 +184,7 @@ function Step3({ data, tier, consentChecked, setConsentChecked }) {
           <span style={{ fontSize: '20px' }}>{tier.icon}</span>
           <div>
             <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', fontFamily: "'DM Sans', sans-serif", fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase' }}>CleanPass™ Enrollment</div>
-            <div style={{ fontSize: '16px', fontWeight: 800, color: tier.accent, fontFamily: "'Syne', sans-serif" }}>{tier.name} Plan</div>
+            <div style={{ fontSize: '16px', fontWeight: 800, color: tier.accent, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{tier.name} Plan</div>
           </div>
         </div>
         <div style={{ padding: '0.5rem 0' }}>
@@ -197,7 +197,7 @@ function Step3({ data, tier, consentChecked, setConsentChecked }) {
         </div>
         <div style={{ background: LIGHT, padding: '0.75rem 1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span style={{ fontSize: '13px', color: GRAY, fontFamily: "'DM Sans', sans-serif" }}>Enrollment fee</span>
-          <span style={{ fontSize: '16px', fontWeight: 800, color: BLUE, fontFamily: "'Syne', sans-serif" }}>Free</span>
+          <span style={{ fontSize: '16px', fontWeight: 800, color: BLUE, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Free</span>
         </div>
       </div>
 
@@ -245,7 +245,7 @@ function SuccessScreen({ data, tier, onClose }) {
           {tier.name} Member
         </span>
       </div>
-      <h3 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: '24px', color: '#0B1220', marginBottom: '0.75rem', letterSpacing: '-0.5px', lineHeight: 1.2 }}>
+      <h3 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: '24px', color: '#0B1220', marginBottom: '0.75rem', letterSpacing: '-0.5px', lineHeight: 1.2 }}>
         Welcome to JSL CleanPass™, {data.firstName || 'there'}!
       </h3>
       <p style={{ fontSize: '15px', color: GRAY, lineHeight: 1.65, marginBottom: '1rem', fontFamily: "'DM Sans', sans-serif", maxWidth: '400px', margin: '0 auto 1rem' }}>
@@ -382,11 +382,11 @@ export default function CleanPassModal({ initialTierId = 'gold', onClose }) {
               JSL CleanPass™
             </div>
             {!submitted ? (
-              <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: '18px', color: WHITE }}>
+              <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: '18px', color: WHITE }}>
                 {STEP_LABELS[step - 1]}
               </div>
             ) : (
-              <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: '18px', color: tier.accent }}>
+              <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: '18px', color: tier.accent }}>
                 Enrollment Complete!
               </div>
             )}

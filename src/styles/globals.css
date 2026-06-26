@@ -4,7 +4,7 @@
 ───────────────────────────────────────────────────────────────*/
 
 /* ─── Google Fonts ───────────────────────────────────────────*/
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap');
 
 /* ─── Tailwind ───────────────────────────────────────────────*/
 @import "tailwindcss";
@@ -23,7 +23,7 @@
   --white:     #ffffff;
 
   /* Typography */
-  --font-display: 'Syne', sans-serif;
+  --font-display: 'Plus Jakarta Sans', sans-serif;
   --font-body:    'DM Sans', sans-serif;
 
   /* Spacing */
@@ -84,9 +84,9 @@ html.lenis body {
 h1 {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: clamp(52px, 6vw, 90px);
-  letter-spacing: -3px;
-  line-height: 1.05;
+  font-size: clamp(48px, 5.5vw, 82px);
+  letter-spacing: -1.5px;
+  line-height: 1.12;
   color: var(--dark);
 }
 
@@ -94,9 +94,9 @@ h1 {
 h2 {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: clamp(36px, 4vw, 56px);
-  letter-spacing: -2px;
-  line-height: 1.1;
+  font-size: clamp(32px, 3.8vw, 52px);
+  letter-spacing: -1px;
+  line-height: 1.15;
   color: var(--dark);
 }
 

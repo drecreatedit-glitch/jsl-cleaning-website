@@ -106,7 +106,7 @@ export default function LegalModal({ page, onClose }) {
               JSL Cleaning Services LLC
             </div>
             <h2 style={{
-              fontFamily: "'Syne', sans-serif",
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
               fontWeight: 800, fontSize: '22px',
               color: '#ffffff', margin: 0, letterSpacing: '-0.5px',
             }}>

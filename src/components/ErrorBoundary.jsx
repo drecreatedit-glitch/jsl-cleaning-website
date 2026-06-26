@@ -75,7 +75,7 @@ export default class ErrorBoundary extends Component {
           </div>
 
           <h1 style={{
-            fontFamily: "'Syne', sans-serif",
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontWeight: 800,
             fontSize: 'clamp(22px, 3vw, 28px)',
             color: DARK,

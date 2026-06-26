@@ -6,15 +6,15 @@ gsap.registerPlugin(ScrollTrigger);
 
 /* ─── Data ───────────────────────────────────────────────── */
 const ADDONS = [
-  { label: 'Interior Windows', price: '$6 / each' },
-  { label: 'Exterior Windows', price: '$7 / each' },
-  { label: 'Oven Cleaning', price: '$35' },
-  { label: 'Fridge Cleaning', price: '$45' },
-  { label: 'Inside Cabinets', price: '$75' },
-  { label: 'Blinds', price: '$25 / room' },
-  { label: 'Laundry', price: '$15 / load' },
-  { label: 'Wall Washing', price: '$60 / room' },
-  { label: 'Carpet Steam Clean', price: '$75 / room' },
+  { label: 'Interior Windows', price: 'Per window' },
+  { label: 'Exterior Windows', price: 'Per window' },
+  { label: 'Oven Cleaning', price: 'Add-on' },
+  { label: 'Fridge Cleaning', price: 'Add-on' },
+  { label: 'Inside Cabinets', price: 'Add-on' },
+  { label: 'Blinds', price: 'Per room' },
+  { label: 'Laundry', price: 'Per load' },
+  { label: 'Wall Washing', price: 'Per room' },
+  { label: 'Carpet Steam Clean', price: 'Per room' },
 ];
 
 const PLANS = [
@@ -22,8 +22,8 @@ const PLANS = [
     id: 'basic',
     label: 'Basic Clean',
     badge: null,
-    price: '$150',
-    period: 'per clean',
+    price: 'Essential',
+    period: 'get a quote',
     featured: false,
     features: [
       'Kitchen & bathrooms',
@@ -33,14 +33,14 @@ const PLANS = [
       'Final walkthrough',
     ],
     note: null,
-    btnLabel: 'Book Basic Clean',
+    btnLabel: 'Get a Quote',
   },
   {
     id: 'deep',
     label: 'Deep Clean',
     badge: 'Most Popular',
-    price: '$220',
-    period: 'per clean',
+    price: 'Premium',
+    period: 'get a quote',
     featured: true,
     features: [
       'Everything in Basic',
@@ -50,14 +50,14 @@ const PLANS = [
       'Soap scum removal',
     ],
     note: null,
-    btnLabel: 'Book Deep Clean',
+    btnLabel: 'Get a Quote',
   },
   {
     id: 'moveinout',
     label: 'Full Package',
     badge: null,
-    price: '$300',
-    period: 'per clean',
+    price: 'Complete',
+    period: 'get a quote',
     featured: false,
     features: [
       'Everything in Deep Clean',
@@ -66,8 +66,8 @@ const PLANS = [
       'Deodorize throughout',
       'Final quality walkthrough',
     ],
-    note: 'Add-ons: Oven +$35 · Fridge +$45',
-    btnLabel: 'Book Move Clean',
+    note: 'Oven & fridge cleaning available as add-ons',
+    btnLabel: 'Get a Quote',
   },
 ];
 
@@ -154,8 +154,8 @@ function PricingCard({ plan, cardRef }) {
         <span style={{
           fontFamily: 'var(--font-display)',
           fontWeight: 800,
-          fontSize: 'clamp(42px, 4vw, 52px)',
-          letterSpacing: '-2px',
+          fontSize: 'clamp(28px, 3vw, 36px)',
+          letterSpacing: '-1.5px',
           color: dark ? '#fff' : 'var(--dark)',
           lineHeight: 1,
         }}>
@@ -166,8 +166,10 @@ function PricingCard({ plan, cardRef }) {
           fontWeight: 500,
           color: dark ? 'rgba(255,255,255,0.6)' : 'var(--gray)',
           marginLeft: '6px',
+          display: 'block',
+          marginTop: '0.5rem',
         }}>
-          / {plan.period}
+          {plan.period}
         </span>
       </div>
 
@@ -468,12 +470,12 @@ export default function Pricing() {
         {/* ── Section header ──────────────────────────── */}
         <div ref={headerRef} style={{ textAlign: 'center', marginBottom: '4rem', opacity: 0 }}>
           <div className="eyebrow" style={{ marginBottom: '0.75rem' }}>
-            Transparent Pricing
+            Our Services
           </div>
-          <h2 style={{ marginBottom: '1rem' }}>Simple, Honest Rates.</h2>
+          <h2 style={{ marginBottom: '1rem' }}>What We Offer.</h2>
           <p style={{ maxWidth: '520px', margin: '0 auto', fontSize: '17px' }}>
-            Starting prices for residential services. Final quote based on home size,
-            condition, and selected add-ons.
+            Tailored cleaning packages for every need. Contact us for a free,
+            no-obligation quote based on your home size and condition.
           </p>
         </div>
 
@@ -560,7 +562,7 @@ export default function Pricing() {
             <span style={{ fontSize: '26px' }}>👑</span>
             <div>
               <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '16px', color: '#92400E', letterSpacing: '-0.3px' }}>
-                Want these prices every time?
+                Want exclusive member savings?
               </div>
               <div style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: 'var(--gray)', marginTop: '2px' }}>
                 CleanPass™ members save 5–15% on <em>every</em> clean — plus free add-ons, rate locks, and priority scheduling.

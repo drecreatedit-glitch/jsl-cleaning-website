@@ -75,7 +75,7 @@ const FootLink = ({ children, onClick }) => (
   </li>
 );
 
-export default function Footer({ openLegal = () => {} }) {
+export default function Footer({ openLegal = () => {}, openMembership = () => {} }) {
   const footerRef = useRef(null);
   const colRefs   = useRef([]);
 

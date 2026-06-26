@@ -9,7 +9,7 @@ const SERVICES = [
   {
     id: 'basic',
     title: 'Basic Cleaning',
-    price: 'From $150',
+    price: 'Custom Quote',
     headline: 'The Essential Clean',
     body: 'Kitchen, bathrooms, living areas, and bedrooms — all the essentials handled with care and consistency.',
     image: 'https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=900&q=80',
@@ -25,7 +25,7 @@ const SERVICES = [
   {
     id: 'residential',
     title: 'Residential Cleaning',
-    price: 'From $150',
+    price: 'Custom Quote',
     headline: 'Your Home, On Schedule',
     body: 'Flexible recurring plans — daily, weekly, bi-weekly, or monthly. We keep your space spotless without you lifting a finger.',
     image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&q=80',
@@ -40,7 +40,7 @@ const SERVICES = [
   {
     id: 'deep',
     title: 'Deep Cleaning',
-    price: 'From $220',
+    price: 'Custom Quote',
     headline: 'Go Beyond the Surface',
     body: 'When standard just isn\'t enough. We detail every corner, edge, grout line, and surface — top to bottom.',
     image: 'https://images.unsplash.com/photo-1563453392212-326f5e854473?w=900&q=80',
@@ -56,7 +56,7 @@ const SERVICES = [
   {
     id: 'moveinout',
     title: 'Move-In / Move-Out',
-    price: 'From $300',
+    price: 'Custom Quote',
     headline: 'Fresh Starts, Clean Exits',
     body: 'Everything in deep clean plus inside cabinets, closets, deodorizing, and a full walkthrough. Get your deposit back.',
     image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80',

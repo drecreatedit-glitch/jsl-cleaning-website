@@ -95,7 +95,7 @@ export const TIERS = [
     benefits: [
       '15% discount on all cleans & add-ons',
       '2 free add-ons per month',
-      '1 complimentary Deep Clean per quarter (value: $220)',
+      '1 complimentary Deep Clean per quarter',
       'Rate locked for 12 months — no price increases',
       'Dedicated 2-person team, guaranteed every visit',
       '$25 referral credit per new JSL client',
@@ -109,7 +109,7 @@ export const TIERS = [
       sameTeam:       true,
       birthdayBonus:  true,
       directJosh:     true,
-      deepClean:      '1/quarter ($220 value)',
+      deepClean:      '1/quarter (included)',
       rateLock:       true,
       referralCredit: '$25/referral',
       report:         true,
@@ -216,7 +216,7 @@ function TierCard({ tier, onJoin, delay = 0 }) {
         </div>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.4rem', marginBottom: '0.25rem' }}>
           <span style={{
-            fontFamily: "'Syne', sans-serif", fontWeight: 900,
+            fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900,
             fontSize: '52px', color: tier.accent, lineHeight: 1,
           }}>
             {tier.discount}
@@ -309,7 +309,7 @@ function ComparisonTable({ onJoin }) {
             </th>
             {TIERS.map(t => (
               <th key={t.id} style={{
-                padding: '1rem', textAlign: 'center', fontFamily: "'Syne', sans-serif",
+                padding: '1rem', textAlign: 'center', fontFamily: "'Plus Jakarta Sans', sans-serif",
                 fontWeight: 800, fontSize: '14px', color: t.accent,
                 borderLeft: '1px solid rgba(255,255,255,0.07)',
                 ...(t.id === 'platinum' ? { borderRadius: '0 12px 0 0' } : {}),
@@ -430,7 +430,7 @@ export default function CleanPass({ onOpenMembership }) {
             </span>
           </div>
           <h2 style={{
-            fontFamily: "'Syne', sans-serif", fontWeight: 800,
+            fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800,
             fontSize: 'clamp(32px, 4.5vw, 54px)', color: DARK,
             letterSpacing: '-2px', lineHeight: 1.1, marginBottom: '1rem',
           }}>
