@@ -23,6 +23,32 @@ function formatRange(total) {
   return `$${low}–$${high}`;
 }
 
+/* ─── Image downscaler ───────────────────────────────────────
+   Resizes an uploaded image so its longest edge ≤ 1280px and
+   re-encodes as JPEG (~0.7 quality). Keeps the base64 payload
+   small (~100–300 KB) so submissions don't fail on size.
+   Returns a Promise resolving to a data-URL string.
+   ─────────────────────────────────────────────────────────── */
+function downscaleImage(file, maxEdge = 1280, quality = 0.7) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.min(1, maxEdge / Math.max(img.width, img.height));
+      const w = Math.round(img.width * scale);
+      const h = Math.round(img.height * scale);
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('image load failed')); };
+    img.src = url;
+  });
+}
+
 /* ─── Google Sheets webhook ──────────────────────────────────
    Paste your Apps Script Web App URL here after deploying.
    See: google-apps-script.js in project root for the script.
@@ -174,6 +200,7 @@ const STEPS = [
    the ballpark — square footage is the single pricing driver.
    ─────────────────────────────────────────────────────────── */
 const OFFICE_SURCHARGE = 1.35; // +35% for commercial / office property type
+const PET_SURCHARGE    = 1.10; // +10% when pets are present (hair/dander adds labor)
 
 /* ─── Framer Motion variants ─────────────────────────────── */
 const slideVariants = {
@@ -400,6 +427,16 @@ function Step2({ data, set }) {
             ))}
           </div>
         </div>
+
+        {/* Pets */}
+        <div style={{ background: WHITE, borderRadius: '14px', border: `1.5px solid ${BORDER}`, padding: '1rem 1.25rem' }}>
+          <div style={{ fontWeight: 600, fontSize: '15px', color: DARK, marginBottom: '0.25rem' }}>Any pets in the home? 🐾</div>
+          <div style={{ fontSize: '12px', color: GRAY, marginBottom: '0.75rem' }}>Helps us bring the right supplies for hair & dander.</div>
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <Pill active={data.pets === true}  onClick={() => set('pets', true)}>Yes</Pill>
+            <Pill active={data.pets === false} onClick={() => set('pets', false)}>No</Pill>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -488,12 +525,16 @@ function Step4({ data, set }) {
     if (remaining <= 0) { setPhotoError('Max 3 photos allowed.'); e.target.value = ''; return; }
     const toProcess = files.slice(0, remaining);
     if (files.length > remaining) setPhotoError(`Max 3 photos — only the first ${remaining} were added.`);
-    Promise.all(toProcess.map(file => new Promise(resolve => {
-      if (file.size > 3 * 1024 * 1024) { setPhotoError('Keep each photo under 3 MB.'); resolve(null); return; }
-      const reader = new FileReader();
-      reader.onload = ev => resolve({ name: file.name, base64: ev.target.result, preview: URL.createObjectURL(file) });
-      reader.readAsDataURL(file);
-    }))).then(results => {
+    Promise.all(toProcess.map(async file => {
+      if (file.size > 3 * 1024 * 1024) { setPhotoError('Keep each photo under 3 MB.'); return null; }
+      try {
+        const base64 = await downscaleImage(file); // resize + compress to keep payload small
+        return { name: file.name, base64, preview: base64 };
+      } catch {
+        setPhotoError('That image could not be processed — try another.');
+        return null;
+      }
+    })).then(results => {
       const valid = results.filter(Boolean);
       if (valid.length) set('photos', [...photos, ...valid]);
     });
@@ -708,14 +749,17 @@ function Step6({ data, estimate, consentChecked, setConsentChecked }) {
             <div style={{ fontSize: '18px', fontWeight: 800, color: WHITE, fontFamily: 'var(--font-display)', marginTop: '0.2rem' }}>JSL Cleaning Services</div>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1.5px' }}>Confirmed by</div>
-            <div style={{ fontSize: '15px', fontWeight: 700, color: WHITE, fontFamily: 'var(--font-display)', marginTop: '0.2rem' }}>JSL rep · 24 hrs</div>
+            <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1.5px' }}>Estimated Range</div>
+            <div style={{ fontSize: '24px', fontWeight: 800, color: BLUE, fontFamily: 'var(--font-display)', marginTop: '0.2rem' }}>
+              {estimate.isCustom ? 'Custom' : formatRange(estimate.total)}
+            </div>
           </div>
         </div>
         <div style={{ padding: '1rem 1.5rem' }}>
           <ReviewRow label="Service" value={svc?.label || '—'} />
           <ReviewRow label="Property" value={`${data.bedrooms || 1} bed / ${data.bathrooms || 1} bath · ${(data.sqft || 1000).toLocaleString()} sq ft`} />
           <ReviewRow label="Type" value={data.propertyType || 'House'} />
+          <ReviewRow label="Pets" value={data.pets ? 'Yes' : 'No'} />
           <ReviewRow label="Frequency" value={freq?.label || '—'} />
           <ReviewRow label="Start Date" value={data.startDate || 'TBD'} />
           <ReviewRow label="Time Preference" value={data.preferredTime === 'morning' ? 'Morning (8am–12pm)' : data.preferredTime === 'afternoon' ? 'Afternoon (12pm–5pm)' : data.preferredTime === 'evening' ? 'Evening (5pm–8pm)' : 'Any time'} />
@@ -726,8 +770,8 @@ function Step6({ data, estimate, consentChecked, setConsentChecked }) {
           <ReviewRow label="Address" value={data.address || '—'} />
         </div>
         <div style={{ background: LIGHT_BG, padding: '0.85rem 1.5rem', borderTop: `1px solid ${BORDER}` }}>
-          <span style={{ fontSize: '13px', color: GRAY, lineHeight: 1.5 }}>
-            We'll email your detailed estimate within 24 hours — no payment now.
+          <span style={{ fontSize: '12px', color: GRAY, lineHeight: 1.5 }}>
+            Estimated range based on your home's size · your JSL rep confirms the final price within 24 hours — no payment now.
           </span>
         </div>
       </div>
@@ -998,6 +1042,7 @@ export default function QuoteForm({ openMembership }) {
     service: '',
     bedrooms: 2, bathrooms: 1, halfBaths: 0, sqft: 1200,
     propertyType: 'House',
+    pets: false,
     frequency: 'onetime',
     startDate: '', preferredTime: '',
     addons: [],
@@ -1037,8 +1082,9 @@ export default function QuoteForm({ openMembership }) {
     const freqMult   = freq?.multiplier || 1;
     const addonTotal = (data.addons || []).reduce((s, id) => s + (ADDONS.find(a => a.id === id)?.price || 0), 0);
     const officeMult = data.propertyType === 'Office' ? OFFICE_SURCHARGE : 1;
+    const petMult    = data.pets ? PET_SURCHARGE : 1;
 
-    const raw   = Math.max(svc.rate * sqft, svc.base) * officeMult; // per-sqft, floored at minimum
+    const raw   = Math.max(svc.rate * sqft, svc.base) * officeMult * petMult; // per-sqft, floored at minimum
     const total = Math.round(raw * freqMult) + addonTotal;
     return { total, isCustom: false };
   }, [data]);
@@ -1098,6 +1144,7 @@ export default function QuoteForm({ openMembership }) {
           bathrooms:     data.bathrooms,
           sqft:          data.sqft,
           propertyType:  data.propertyType,
+          pets:          data.pets ? 'Yes' : 'No',
           addons:        (data.addons || []).map(id => ADDONS.find(a => a.id === id)?.label || id),
           photos:        (data.photos || []).map(p => ({ name: p.name, base64: p.base64 })),
           startDate:     data.startDate,
