@@ -749,10 +749,8 @@ function Step6({ data, estimate, consentChecked, setConsentChecked }) {
             <div style={{ fontSize: '18px', fontWeight: 800, color: WHITE, fontFamily: 'var(--font-display)', marginTop: '0.2rem' }}>JSL Cleaning Services</div>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1.5px' }}>Estimated Range</div>
-            <div style={{ fontSize: '24px', fontWeight: 800, color: BLUE, fontFamily: 'var(--font-display)', marginTop: '0.2rem' }}>
-              {estimate.isCustom ? 'Custom' : formatRange(estimate.total)}
-            </div>
+            <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1.5px' }}>Confirmed by</div>
+            <div style={{ fontSize: '15px', fontWeight: 700, color: WHITE, fontFamily: 'var(--font-display)', marginTop: '0.2rem' }}>JSL rep · 24 hrs</div>
           </div>
         </div>
         <div style={{ padding: '1rem 1.5rem' }}>
@@ -770,8 +768,8 @@ function Step6({ data, estimate, consentChecked, setConsentChecked }) {
           <ReviewRow label="Address" value={data.address || '—'} />
         </div>
         <div style={{ background: LIGHT_BG, padding: '0.85rem 1.5rem', borderTop: `1px solid ${BORDER}` }}>
-          <span style={{ fontSize: '12px', color: GRAY, lineHeight: 1.5 }}>
-            Estimated range based on your home's size · your JSL rep confirms the final price within 24 hours — no payment now.
+          <span style={{ fontSize: '13px', color: GRAY, lineHeight: 1.5 }}>
+            We'll email your detailed estimate within 24 hours — no payment now.
           </span>
         </div>
       </div>
