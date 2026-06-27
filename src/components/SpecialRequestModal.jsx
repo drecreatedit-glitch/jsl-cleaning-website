@@ -144,7 +144,7 @@ export default function SpecialRequestModal({ onClose }) {
             <div>
               <div style={{ fontWeight: 700, fontSize: '17px', letterSpacing: '-0.3px' }}>Special Request</div>
               <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginTop: '1px' }}>
-                We'll reply in under 2 hrs during business hours
+                We'll reply within 24 hours
               </div>
             </div>
           </div>
@@ -184,7 +184,7 @@ export default function SpecialRequestModal({ onClose }) {
                 Request Sent!
               </h3>
               <p style={{ fontSize: '15px', color: GRAY, maxWidth: '340px', margin: '0 auto 1.5rem', lineHeight: 1.6 }}>
-                We've received your message and will get back to you within 2 business hours.
+                We've received your message and will get back to you within 24 hours.
               </p>
               <button
                 onClick={onClose}
@@ -278,7 +278,7 @@ export default function SpecialRequestModal({ onClose }) {
               </button>
 
               <p style={{ fontSize: '11px', color: GRAY, textAlign: 'center', lineHeight: 1.5 }}>
-                We'll reply within 2 business hours. No commitment required.
+                We'll reply within 24 hours. No commitment required.
               </p>
             </form>
           )}

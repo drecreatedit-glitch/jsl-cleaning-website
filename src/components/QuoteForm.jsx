@@ -131,12 +131,12 @@ const recordSubmission = () => submissionTimes.push(Date.now());
 
 /* ─── Service data ───────────────────────────────────────── */
 const SERVICES = [
-  { id: 'basic',     label: 'Basic Cleaning',     icon: '🧹', base: 150, desc: 'Kitchens, baths, living areas' },
-  { id: 'deep',      label: 'Deep Cleaning',       icon: '✨', base: 220, desc: 'Inside appliances, grout, corners' },
-  { id: 'movein',    label: 'Move-In / Move-Out',  icon: '📦', base: 300, desc: 'Cabinet interiors, deodorize, full detail' },
+  { id: 'basic',     label: 'Basic Cleaning',     icon: '🧹', base: 165, desc: 'Kitchens, baths, living areas' },
+  { id: 'deep',      label: 'Deep Cleaning',       icon: '✨', base: 250, desc: 'Inside appliances, grout, corners' },
+  { id: 'movein',    label: 'Move-In / Move-Out',  icon: '📦', base: 330, desc: 'Cabinet interiors, deodorize, full detail' },
   { id: 'airbnb',    label: 'Airbnb Turnover',    icon: '🏠', base: 0,   desc: 'Guest-ready between stays', customQuote: true },
   { id: 'office',    label: 'Office Cleaning',     icon: '🏢', base: 0,   desc: 'Commercial & retail spaces', customQuote: true },
-  { id: 'recurring', label: 'Recurring Plan',      icon: '🔄', base: 150, desc: 'Weekly, bi-weekly, or monthly' },
+  { id: 'recurring', label: 'Recurring Plan',      icon: '🔄', base: 165, desc: 'Weekly, bi-weekly, or monthly' },
 ];
 
 const FREQUENCIES = [
@@ -175,6 +175,13 @@ const SQFT_MULTIPLIER = (sqft) => {
   if (sqft <= 3500) return 1.75;
   return 2.10;
 };
+
+/* ─── South Florida market pricing factors ───────────────── */
+const BED_RATE       = 28;    // per additional bedroom beyond the 1st
+const BATH_RATE      = 35;    // per additional full bath beyond the 1st
+const HALF_BATH_RATE = 18;    // per half bath / powder room
+const SFLA_MARKET    = 1.10;  // ~10% South Florida regional premium
+const OFFICE_SURCHARGE = 1.35; // +35% for commercial / office property type
 
 /* ─── Framer Motion variants ─────────────────────────────── */
 const slideVariants = {
@@ -299,7 +306,7 @@ function Step1({ data, set }) {
             <div style={{ fontSize: '12px', color: GRAY, lineHeight: 1.4 }}>{svc.desc}</div>
             {svc.customQuote
               ? <div style={{ marginTop: '0.5rem', fontSize: '11px', fontWeight: 700, color: BLUE_MID }}>CUSTOM QUOTE</div>
-              : <div style={{ marginTop: '0.5rem', fontSize: '13px', fontWeight: 700, color: BLUE }}>From ${svc.base}</div>
+              : <div style={{ marginTop: '0.5rem', fontSize: '13px', fontWeight: 700, color: BLUE }}>Starting at ${svc.base}</div>
             }
           </button>
         ))}
@@ -311,6 +318,7 @@ function Step1({ data, set }) {
 /* ─── Step 2: Property details ────────────────────────────── */
 function Step2({ data, set }) {
   const sqft = data.sqft || 1000;
+  const [showSqftTip, setShowSqftTip] = useState(false);
   return (
     <div>
       <h3 style={{ fontSize: '22px', fontWeight: 800, color: DARK, marginBottom: '0.4rem', fontFamily: 'var(--font-display)' }}>
@@ -322,11 +330,31 @@ function Step2({ data, set }) {
         <Counter label="Bathrooms" sub="Full baths" value={data.bathrooms || 1} onDec={() => set('bathrooms', Math.max(1, (data.bathrooms||1) - 1))} onInc={() => set('bathrooms', Math.min(8, (data.bathrooms||1) + 1))} min={1} max={8} />
         <Counter label="Half Baths" sub="Powder rooms" value={data.halfBaths || 0} onDec={() => set('halfBaths', Math.max(0, (data.halfBaths||0) - 1))} onInc={() => set('halfBaths', Math.min(4, (data.halfBaths||0) + 1))} min={0} max={4} />
 
-        {/* Sq ft slider */}
+        {/* Sq ft slider + typed input */}
         <div style={{ background: WHITE, borderRadius: '14px', border: `1.5px solid ${BORDER}`, padding: '1rem 1.25rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
             <span style={{ fontWeight: 600, fontSize: '15px', color: DARK }}>Square Footage</span>
-            <span style={{ fontWeight: 800, fontSize: '16px', color: BLUE, fontFamily: 'var(--font-display)' }}>{sqft.toLocaleString()} sq ft</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <input
+                type="number"
+                min={400} max={5000} step={50}
+                value={sqft}
+                onChange={e => {
+                  const v = Math.min(5000, Math.max(400, Number(e.target.value) || 400));
+                  set('sqft', v);
+                }}
+                style={{
+                  width: '80px', padding: '0.3rem 0.5rem',
+                  border: `1.5px solid ${BORDER}`, borderRadius: '8px',
+                  fontSize: '14px', fontWeight: 700, color: BLUE,
+                  fontFamily: 'var(--font-display)', textAlign: 'right',
+                  outline: 'none',
+                }}
+                onFocus={e => { e.target.style.borderColor = BLUE; }}
+                onBlur={e => { e.target.style.borderColor = BORDER; }}
+              />
+              <span style={{ fontSize: '13px', color: GRAY }}>sq ft</span>
+            </div>
           </div>
           <input
             type="range" min={400} max={5000} step={50}
@@ -337,6 +365,38 @@ function Step2({ data, set }) {
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.4rem' }}>
             <span style={{ fontSize: '11px', color: GRAY }}>400 sq ft</span>
             <span style={{ fontSize: '11px', color: GRAY }}>5,000 sq ft</span>
+          </div>
+
+          {/* "How do I find my sq ft?" collapsible tip */}
+          <div style={{ marginTop: '0.85rem', borderTop: `1px solid ${BORDER}`, paddingTop: '0.75rem' }}>
+            <button
+              type="button"
+              onClick={() => setShowSqftTip(v => !v)}
+              style={{
+                background: 'none', border: 'none', padding: 0,
+                fontSize: '12px', fontWeight: 600, color: BLUE,
+                cursor: 'pointer', fontFamily: 'var(--font-body)',
+                display: 'flex', alignItems: 'center', gap: '0.3rem',
+              }}
+            >
+              <span style={{ fontSize: '14px' }}>{showSqftTip ? '▾' : '▸'}</span>
+              How do I find my square footage?
+            </button>
+            {showSqftTip && (
+              <div style={{
+                marginTop: '0.65rem', fontSize: '12.5px', color: GRAY,
+                lineHeight: 1.65, display: 'flex', flexDirection: 'column', gap: '0.35rem',
+              }}>
+                <span>📄 Check your <strong>lease, closing disclosure, or listing</strong> (Zillow, Redfin, Trulia).</span>
+                <span>🏛 Search your address on your <strong>county property appraiser</strong> website:<br />
+                  &nbsp;&nbsp;• Broward: <strong>bcpa.net</strong> &nbsp;• Palm Beach: <strong>pbcgov.com/papa</strong><br />
+                  &nbsp;&nbsp;• Miami-Dade: <strong>miamidade.gov/pa</strong>
+                </span>
+                <span>📏 Typical sizes to help you estimate:<br />
+                  &nbsp;&nbsp;Studio ~500 · 1 bed ~750 · 2 bed ~1,100 · 3 bed ~1,600 · 4 bed ~2,200 sq ft
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -378,14 +438,6 @@ function Step3({ data, set }) {
             }}
           >
             <div style={{ fontWeight: 700, fontSize: '15px', color: DARK, fontFamily: 'var(--font-display)' }}>{f.label}</div>
-            {f.discount && (
-              <div style={{
-                display: 'inline-block', marginTop: '0.35rem',
-                padding: '0.2rem 0.55rem', borderRadius: '999px',
-                background: 'rgba(21,120,229,0.12)', color: BLUE,
-                fontSize: '11px', fontWeight: 700,
-              }}>{f.discount}</div>
-            )}
           </button>
         ))}
       </div>
@@ -426,7 +478,7 @@ function Step3({ data, set }) {
 
       <div style={{ marginTop: '1rem', padding: '0.85rem 1.1rem', borderRadius: '12px', background: 'rgba(21,120,229,0.07)', border: `1px solid rgba(21,120,229,0.2)` }}>
         <p style={{ fontSize: '13px', color: BLUE, fontWeight: 500, margin: 0 }}>
-          📅 We'll confirm availability and send you a booking confirmation in under 2 hours during working hours.
+          📅 We'll confirm availability and send you a booking confirmation within 24 hours.
         </p>
       </div>
     </div>
@@ -568,7 +620,7 @@ function Step6({ data, estimate, consentChecked, setConsentChecked }) {
       <h3 style={{ fontSize: '22px', fontWeight: 800, color: DARK, marginBottom: '0.4rem', fontFamily: 'var(--font-display)' }}>
         Review Your Quote
       </h3>
-      <p style={{ fontSize: '15px', color: GRAY, marginBottom: '1.5rem' }}>Everything look right? Hit submit and we&apos;ll confirm in under 2 hours during working hours.</p>
+      <p style={{ fontSize: '15px', color: GRAY, marginBottom: '1.5rem' }}>Everything look right? Hit submit and we&apos;ll confirm within 24 hours.</p>
 
       <div style={{ background: WHITE, borderRadius: '16px', border: `1.5px solid ${BORDER}`, overflow: 'hidden' }}>
         <div style={{ background: DARK, padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -587,7 +639,7 @@ function Step6({ data, estimate, consentChecked, setConsentChecked }) {
           <ReviewRow label="Service" value={svc?.label || '—'} />
           <ReviewRow label="Property" value={`${data.bedrooms || 1} bed / ${data.bathrooms || 1} bath · ${(data.sqft || 1000).toLocaleString()} sq ft`} />
           <ReviewRow label="Type" value={data.propertyType || 'House'} />
-          <ReviewRow label="Frequency" value={`${freq?.label || '—'}${freq?.discount ? ` (${freq.discount})` : ''}`} />
+          <ReviewRow label="Frequency" value={freq?.label || '—'} />
           <ReviewRow label="Start Date" value={data.startDate || 'TBD'} />
           <ReviewRow label="Time Preference" value={data.preferredTime === 'morning' ? 'Morning (8am–12pm)' : data.preferredTime === 'afternoon' ? 'Afternoon (12pm–5pm)' : data.preferredTime === 'evening' ? 'Evening (5pm–8pm)' : 'Any time'} />
           {selectedAddons.length > 0 && (
@@ -686,13 +738,11 @@ function EstimateSidebar({ estimate, data, currentStep }) {
         {data.sqft && !estimate.isCustom && (
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
             <span style={{ color: 'rgba(255,255,255,0.55)' }}>{(data.sqft).toLocaleString()} sq ft</span>
-            <span style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 500 }}>×{SQFT_MULTIPLIER(data.sqft).toFixed(2)}</span>
           </div>
         )}
-        {freq && freq.discount && !estimate.isCustom && (
+        {freq && !estimate.isCustom && (
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
             <span style={{ color: 'rgba(255,255,255,0.55)' }}>{freq.label}</span>
-            <span style={{ color: '#4ade80', fontWeight: 600 }}>−{freq.discount}</span>
           </div>
         )}
         {selectedAddons.map(a => (
@@ -707,7 +757,7 @@ function EstimateSidebar({ estimate, data, currentStep }) {
       <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', marginBottom: '1.25rem' }} />
 
       {/* Trust badges */}
-      {['✅ Free estimate', '🔒 No payment now', '📞 Reply under 2hrs (business hours)'].map(t => (
+      {['✅ Free estimate', '🔒 No payment now', '📞 Response within 24hrs'].map(t => (
         <div key={t} style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginBottom: '0.4rem', fontWeight: 500 }}>{t}</div>
       ))}
 
@@ -762,7 +812,7 @@ function SuccessScreen({ data, estimate }) {
       </h2>
       <p style={{ fontSize: '16px', color: GRAY, maxWidth: '460px', margin: '0 auto 2rem', lineHeight: 1.65 }}>
         Thanks, <strong style={{ color: DARK }}>{data.firstName}</strong>! We've received your quote request for <strong style={{ color: DARK }}>{svc?.label}</strong>.
-        Our team will confirm your appointment and send a detailed quote to <strong style={{ color: DARK }}>{data.email}</strong> in under 2 hours during working hours.
+        Our team will confirm your appointment and send a detailed quote to <strong style={{ color: DARK }}>{data.email}</strong> within 24 hours.
       </p>
 
       {/* Summary card */}
@@ -888,13 +938,20 @@ export default function QuoteForm({ openMembership }) {
     const svc = SERVICES.find(s => s.id === data.service);
     if (!svc || svc.customQuote) return { total: 0, isCustom: true };
 
-    const base = svc.base;
-    const sqftMult = SQFT_MULTIPLIER(data.sqft || 1200);
-    const freq = FREQUENCIES.find(f => f.id === data.frequency);
-    const freqMult = freq?.multiplier || 1;
+    const base      = svc.base;
+    const sqftMult  = SQFT_MULTIPLIER(data.sqft || 1200);
+    const freq      = FREQUENCIES.find(f => f.id === data.frequency);
+    const freqMult  = freq?.multiplier || 1;
     const addonTotal = (data.addons || []).reduce((s, id) => s + (ADDONS.find(a => a.id === id)?.price || 0), 0);
 
-    const total = Math.round(base * sqftMult * freqMult) + addonTotal;
+    const beds      = Math.max(data.bedrooms  || 1, 1);
+    const baths     = Math.max(data.bathrooms || 1, 1);
+    const halfBaths = data.halfBaths || 0;
+    const roomAdj   = (beds - 1) * BED_RATE + (baths - 1) * BATH_RATE + halfBaths * HALF_BATH_RATE;
+
+    const officeMult = data.propertyType === 'Office' ? OFFICE_SURCHARGE : 1;
+    const subtotal   = (base * sqftMult + roomAdj) * SFLA_MARKET * officeMult;
+    const total      = Math.round(subtotal * freqMult) + addonTotal;
     return { total, isCustom: false };
   }, [data]);
 
