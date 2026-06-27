@@ -487,6 +487,35 @@ function Step3({ data, set }) {
 
 /* ─── Step 4: Add-ons ─────────────────────────────────────── */
 function Step4({ data, set }) {
+  const photos   = data.photos || [];
+  const [photoError, setPhotoError] = useState('');
+
+  const handlePhotoChange = (e) => {
+    setPhotoError('');
+    const files = Array.from(e.target.files || []);
+    const remaining = 3 - photos.length;
+    if (remaining <= 0) { setPhotoError('Max 3 photos allowed.'); e.target.value = ''; return; }
+    const toProcess = files.slice(0, remaining);
+    if (files.length > remaining) setPhotoError(`Max 3 photos — only the first ${remaining} were added.`);
+    Promise.all(toProcess.map(file => new Promise(resolve => {
+      if (file.size > 3 * 1024 * 1024) { setPhotoError('Keep each photo under 3 MB.'); resolve(null); return; }
+      const reader = new FileReader();
+      reader.onload = ev => resolve({ name: file.name, base64: ev.target.result, preview: URL.createObjectURL(file) });
+      reader.readAsDataURL(file);
+    }))).then(results => {
+      const valid = results.filter(Boolean);
+      if (valid.length) set('photos', [...photos, ...valid]);
+    });
+    e.target.value = '';
+  };
+
+  const removePhoto = (idx) => {
+    const updated = [...photos];
+    URL.revokeObjectURL(updated[idx]?.preview);
+    updated.splice(idx, 1);
+    set('photos', updated);
+  };
+
   const toggle = (id) => {
     const current = data.addons || [];
     set('addons', current.includes(id) ? current.filter(a => a !== id) : [...current, id]);
@@ -523,7 +552,6 @@ function Step4({ data, set }) {
               }}>{addon.icon}</div>
               <div>
                 <div style={{ fontWeight: 600, fontSize: '13px', color: DARK, lineHeight: 1.3 }}>{addon.label}</div>
-                <div style={{ fontSize: '13px', fontWeight: 700, color: on ? BLUE : GRAY, marginTop: '0.1rem' }}>+${addon.price}</div>
               </div>
               {on && (
                 <div style={{ marginLeft: 'auto', width: 20, height: 20, borderRadius: '50%', background: BLUE, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -537,8 +565,68 @@ function Step4({ data, set }) {
       {selected.length > 0 && (
         <div style={{ marginTop: '1rem', padding: '0.75rem 1rem', borderRadius: '10px', background: LIGHT_BG, border: `1px solid ${BORDER}` }}>
           <span style={{ fontSize: '13px', color: GRAY }}>
-            {selected.length} add-on{selected.length > 1 ? 's' : ''} selected — +${selected.reduce((s, id) => s + (ADDONS.find(a => a.id === id)?.price || 0), 0)}
+            {selected.length} add-on{selected.length > 1 ? 's' : ''} selected
           </span>
+        </div>
+      )}
+
+      {/* Photo upload — shown when at least 1 add-on is selected */}
+      {selected.length > 0 && (
+        <div style={{ marginTop: '1.5rem', padding: '1.25rem', borderRadius: '14px', border: `1.5px dashed ${BORDER}`, background: 'rgba(21,120,229,0.03)' }}>
+          <div style={{ fontWeight: 600, fontSize: '14px', color: DARK, marginBottom: '0.35rem' }}>
+            📷 Upload photos <span style={{ fontWeight: 400, color: GRAY }}>(optional)</span>
+          </div>
+          <p style={{ fontSize: '12px', color: GRAY, marginBottom: '1rem', lineHeight: 1.55 }}>
+            Photos help our team arrive prepared with the right supplies and know what to expect.
+          </p>
+
+          {/* Thumbnail previews */}
+          {photos.length > 0 && (
+            <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', marginBottom: '0.85rem' }}>
+              {photos.map((p, i) => (
+                <div key={i} style={{ position: 'relative', width: 80, height: 80, borderRadius: '10px', overflow: 'hidden', border: `1.5px solid ${BORDER}` }}>
+                  <img src={p.preview} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <button
+                    type="button"
+                    onClick={() => removePhoto(i)}
+                    style={{
+                      position: 'absolute', top: 3, right: 3,
+                      width: 20, height: 20, borderRadius: '50%',
+                      background: 'rgba(11,18,32,0.75)', border: 'none',
+                      color: '#fff', fontSize: '12px', lineHeight: 1,
+                      cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}
+                    aria-label="Remove photo"
+                  >✕</button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {photos.length < 3 && (
+            <label style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+              padding: '0.55rem 1.1rem', borderRadius: '8px',
+              background: BLUE, color: WHITE,
+              fontSize: '13px', fontWeight: 600, cursor: 'pointer',
+              fontFamily: 'var(--font-body)',
+            }}>
+              + Add Photo{photos.length > 0 ? ' (max 3)' : ''}
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handlePhotoChange}
+                style={{ display: 'none' }}
+              />
+            </label>
+          )}
+
+          {photoError && (
+            <p style={{ fontSize: '12px', color: '#DC2626', marginTop: '0.5rem', fontWeight: 500 }}>
+              {photoError}
+            </p>
+          )}
         </div>
       )}
     </div>
@@ -746,9 +834,8 @@ function EstimateSidebar({ estimate, data, currentStep }) {
           </div>
         )}
         {selectedAddons.map(a => (
-          <div key={a.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
+          <div key={a.id} style={{ fontSize: '13px' }}>
             <span style={{ color: 'rgba(255,255,255,0.55)' }}>{a.icon} {a.label}</span>
-            <span style={{ color: WHITE, fontWeight: 600 }}>+${a.price}</span>
           </div>
         ))}
       </div>
@@ -909,6 +996,7 @@ export default function QuoteForm({ openMembership }) {
     frequency: 'onetime',
     startDate: '', preferredTime: '',
     addons: [],
+    photos: [],
     firstName: '', lastName: '', email: '', phone: '', address: '', notes: '',
   });
 
@@ -1011,6 +1099,7 @@ export default function QuoteForm({ openMembership }) {
           sqft:          data.sqft,
           propertyType:  data.propertyType,
           addons:        (data.addons || []).map(id => ADDONS.find(a => a.id === id)?.label || id),
+          photos:        (data.photos || []).map(p => ({ name: p.name, base64: p.base64 })),
           startDate:     data.startDate,
           preferredTime: data.preferredTime,
           estimate:      estimate.isCustom ? null : estimate.total,

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react'; // useRef kept for wipeRef + contentRef
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -7,26 +7,10 @@ gsap.registerPlugin(ScrollTrigger);
 export default function CTABanner() {
   const sectionRef  = useRef(null);
   const wipeRef     = useRef(null);   // overlay that slides away (clip reveal)
-  const bgImgRef    = useRef(null);   // parallax image
   const contentRef  = useRef(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-
-      /* ── Parallax on background image ─────────────────── */
-      gsap.fromTo(bgImgRef.current,
-        { y: '-12%' },
-        {
-          y: '12%',
-          ease: 'none',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: true,
-          },
-        }
-      );
 
       /* ── Clip-reveal wipe: dark overlay slides left → off ─ */
       gsap.fromTo(wipeRef.current,
@@ -74,31 +58,9 @@ export default function CTABanner() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        background: 'linear-gradient(145deg, #0B1220 0%, #111a2e 55%, #0d1e3a 100%)',
       }}
     >
-      {/* ── Parallax background image ────────────────────── */}
-      <img
-        ref={bgImgRef}
-        src="https://images.unsplash.com/0CuTJUAOn-4?w=1600&q=80"
-        alt=""
-        aria-hidden="true"
-        style={{
-          position: 'absolute', inset: 0,
-          width: '100%', height: '130%',
-          top: '-15%',
-          objectFit: 'cover',
-          willChange: 'transform',
-          zIndex: 0,
-        }}
-      />
-
-      {/* ── Gradient overlay ─────────────────────────────── */}
-      <div style={{
-        position: 'absolute', inset: 0,
-        background: 'linear-gradient(135deg, rgba(11,18,32,0.90) 0%, rgba(21,120,229,0.45) 100%)',
-        zIndex: 1,
-        pointerEvents: 'none',
-      }} />
 
       {/* ── Wipe overlay (slides away on scroll) ─────────── */}
       <div

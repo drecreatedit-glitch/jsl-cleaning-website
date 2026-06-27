@@ -13,7 +13,7 @@ const SERVICES = [
     price: 'Custom Quote',
     headline: 'The Essential Clean',
     body: 'Kitchen, bathrooms, living areas, and bedrooms — all the essentials handled with care and consistency.',
-    image: 'https://images.unsplash.com/__ZMnefoI3k?w=900&q=80',
+    image: 'https://images.unsplash.com/photo-1684407616956-3cccbb3ab0bc?w=900&q=80',
     features: [
       'Sanitize counters & sink',
       'Disinfect high-touch points',
@@ -29,7 +29,7 @@ const SERVICES = [
     price: 'Custom Quote',
     headline: 'Your Home, On Schedule',
     body: 'Flexible recurring plans — daily, weekly, bi-weekly, or monthly. We keep your space spotless without you lifting a finger.',
-    image: 'https://images.unsplash.com/PE4pFgcYzoQ?w=900&q=80',
+    image: 'https://images.unsplash.com/photo-1649083048337-4aeb6dda80bb?w=900&q=80',
     features: [
       'Choose your frequency',
       'Consistent team every visit',
@@ -44,7 +44,7 @@ const SERVICES = [
     price: 'Custom Quote',
     headline: 'Go Beyond the Surface',
     body: 'When standard just isn\'t enough. We detail every corner, edge, grout line, and surface — top to bottom.',
-    image: 'https://images.unsplash.com/RxblbDLXTmk?w=900&q=80',
+    image: 'https://images.unsplash.com/photo-1663047397245-2ddad26c5dd7?w=900&q=80',
     features: [
       'Degrease stovetop & knobs',
       'Inside microwave',
@@ -60,7 +60,7 @@ const SERVICES = [
     price: 'Custom Quote',
     headline: 'Fresh Starts, Clean Exits',
     body: 'Everything in deep clean plus inside cabinets, closets, deodorizing, and a full walkthrough. Get your deposit back.',
-    image: 'https://images.unsplash.com/UPbYh3A5cdg?w=900&q=80',
+    image: 'https://images.unsplash.com/flagged/photo-1556438758-df7b9e0c0fe4?w=900&q=80',
     features: [
       'Inside cabinets & drawers',
       'Closets & shelves',
@@ -75,7 +75,7 @@ const SERVICES = [
     price: 'Custom Quote',
     headline: 'Guest-Ready Every Time',
     body: 'Turnover cleans between guests — fast, thorough, and inspection-ready. Keep your ratings high and your bookings full.',
-    image: 'https://images.unsplash.com/vIbxvHj9m9g?w=900&q=80',
+    image: 'https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?w=900&q=80',
     features: [
       'Quick turnaround times',
       'Linen & towel refresh available',
@@ -90,7 +90,7 @@ const SERVICES = [
     price: 'Custom Quote',
     headline: 'Professional Spaces Deserve Professional Cleaning',
     body: 'Flexible scheduling for offices, retail, and commercial spaces. After-hours available. Minimal disruption, maximum results.',
-    image: 'https://images.unsplash.com/qHiucnOW24w?w=900&q=80',
+    image: 'https://images.unsplash.com/photo-1556761175-4b46a572b786?w=900&q=80',
     features: [
       'Daily or weekly contracts',
       'After-hours available',
