@@ -466,7 +466,3 @@ img[loading="lazy"].loaded { opacity: 1; }
   }
 }
 
-/* ─── Custom cursor: hide default on desktop ─────────────────*/
-@media (pointer: fine) {
-  * { cursor: none !important; }
-}

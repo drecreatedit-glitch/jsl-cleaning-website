@@ -79,7 +79,7 @@ export default function CTABanner() {
       {/* ── Parallax background image ────────────────────── */}
       <img
         ref={bgImgRef}
-        src="https://images.unsplash.com/photo-1527515637462-cff94edd56f9?w=1600&q=80"
+        src="https://images.unsplash.com/0CuTJUAOn-4?w=1600&q=80"
         alt=""
         aria-hidden="true"
         style={{
@@ -199,14 +199,17 @@ export default function CTABanner() {
           }}
           onMouseEnter={e => e.currentTarget.style.color = '#fff'}
           onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.8)'}>
-            <span style={{ fontSize: '18px' }}>✉️</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <rect x="2" y="4" width="20" height="16" rx="2"/>
+              <path d="M2 7l10 7 10-7"/>
+            </svg>
             jlopez@jslcleaningservices.com
           </a>
         </div>
 
         {/* CTA Button */}
         <a
-          href="mailto:jlopez@jslcleaningservices.com"
+          href="#quote"
           style={{
             display: 'inline-flex',
             alignItems: 'center',

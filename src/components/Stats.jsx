@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import useIsMobile from '../hooks/useIsMobile';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -273,6 +274,7 @@ function Marquee() {
 
 /* ─── Main export ────────────────────────────────────────── */
 export default function Stats() {
+  const isMobile      = useIsMobile();
   const sectionRef    = useRef(null);
   const statsRowRef   = useRef(null);
   const headerRef     = useRef(null);
@@ -349,8 +351,8 @@ export default function Stats() {
           ref={statsRowRef}
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: '1rem',
+            gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
+            gap: isMobile ? '2rem 1rem' : '1rem',
             paddingBottom: '4rem',
             borderBottom: '1px solid rgba(255,255,255,0.06)',
             marginBottom: '4.5rem',
@@ -381,7 +383,7 @@ export default function Stats() {
         {/* ── Testimonial cards ─────────────────────────── */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
+          gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
           gap: '1.25rem',
           marginBottom: '4rem',
         }}>

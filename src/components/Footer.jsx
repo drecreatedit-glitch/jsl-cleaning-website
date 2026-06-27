@@ -22,7 +22,7 @@ const NAV_COLS = [
   },
   {
     heading: 'Company',
-    links: ['About JSL', 'Reviews', 'FAQ', 'Contact', 'Book a Service', '👑 CleanPass™ Membership'],
+    links: ['About JSL', 'Reviews', 'FAQ', 'Contact', 'Book a Service', '👑 CleanPass™ Membership', '✉ Special Request'],
   },
 ];
 
@@ -183,7 +183,7 @@ export default function Footer({ openLegal = () => {}, openMembership = () => {}
               }}
               onMouseEnter={e => e.currentTarget.style.color = '#fff'}
               onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.55)'}>
-                <span style={{ color: 'var(--blue)', fontSize: '12px' }}>✉️</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
                 jlopez@jslcleaningservices.com
               </a>
               <span style={{
@@ -224,7 +224,13 @@ export default function Footer({ openLegal = () => {}, openMembership = () => {}
                 {col.links.map(link => (
                   <FootLink
                     key={link}
-                    onClick={link.includes('CleanPass') ? () => openMembership('gold') : undefined}
+                    onClick={
+                      link.includes('CleanPass')
+                        ? () => openMembership('gold')
+                        : link.includes('Special Request')
+                          ? () => window.dispatchEvent(new CustomEvent('jsl:open-special-request'))
+                          : undefined
+                    }
                   >
                     {link}
                   </FootLink>

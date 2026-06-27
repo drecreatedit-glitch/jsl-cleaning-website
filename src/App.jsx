@@ -15,10 +15,10 @@ import CleanPass from './components/CleanPass';
 import CTABanner from './components/CTABanner';
 import Footer from './components/Footer';
 import ScrollProgressBar from './components/ScrollProgressBar';
-import CustomCursor from './components/CustomCursor';
 import LegalModal from './components/LegalModal';
 import CookieBanner from './components/CookieBanner';
 import CleanPassModal from './components/CleanPassModal';
+import SpecialRequestModal from './components/SpecialRequestModal';
 import './styles/globals.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -26,8 +26,9 @@ gsap.registerPlugin(ScrollTrigger);
 export default function App() {
   const lenisRef = useRef(null);
   const rafCallbackRef = useRef(null);
-  const [legalModal, setLegalModal] = useState(null);       // null | 'privacy' | 'terms'
+  const [legalModal, setLegalModal] = useState(null);           // null | 'privacy' | 'terms'
   const [membershipModal, setMembershipModal] = useState(null); // null | tier id
+  const [specialRequestOpen, setSpecialRequestOpen] = useState(false);
 
   const openLegal       = useCallback((page) => setLegalModal(page), []);
   const closeLegal      = useCallback(() => setLegalModal(null), []);
@@ -74,10 +75,16 @@ export default function App() {
     return () => window.removeEventListener('jsl:open-membership', handler);
   }, [openMembership]);
 
+  // Global event bus for opening Special Request modal
+  useEffect(() => {
+    const handler = () => setSpecialRequestOpen(true);
+    window.addEventListener('jsl:open-special-request', handler);
+    return () => window.removeEventListener('jsl:open-special-request', handler);
+  }, []);
+
   return (
     <div style={{ position: 'relative' }}>
       <ScrollProgressBar />
-      <CustomCursor />
       <Navbar />
       <main>
         <Hero />
@@ -95,6 +102,9 @@ export default function App() {
       <LegalModal page={legalModal} onClose={closeLegal} />
       {membershipModal !== null && (
         <CleanPassModal initialTierId={membershipModal} onClose={closeMembership} />
+      )}
+      {specialRequestOpen && (
+        <SpecialRequestModal onClose={() => setSpecialRequestOpen(false)} />
       )}
       <CookieBanner />
     </div>

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import useIsMobile from '../hooks/useIsMobile';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -207,7 +208,7 @@ function PricingCard({ plan, cardRef }) {
 
       {/* CTA Button */}
       <a
-        href="mailto:jlopez@jslcleaningservices.com"
+        href="#quote"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -372,6 +373,7 @@ function AddonsAccordion() {
 
 /* ─── Main export ────────────────────────────────────────── */
 export default function Pricing() {
+  const isMobile     = useIsMobile();
   const sectionRef   = useRef(null);
   const headerRef    = useRef(null);
   const cardRefs     = useRef(PLANS.map(() => ({ current: null })));
@@ -482,11 +484,11 @@ export default function Pricing() {
         {/* ── Pricing cards ───────────────────────────── */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
+          gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
           gap: '1.25rem',
           alignItems: 'start',
           marginBottom: '3rem',
-          perspective: '1200px',   /* enables rotateY depth */
+          perspective: '1200px',
         }}>
           {PLANS.map((plan, i) => (
             <PricingCard

@@ -1,6 +1,7 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
+import useIsMobile from '../hooks/useIsMobile';
 
 /* ─── Brand tokens ───────────────────────────────────────── */
 const BLUE     = '#1578E5';
@@ -11,6 +12,16 @@ const GRAY     = '#5A6A82';
 const WHITE    = '#FFFFFF';
 const BLUE_MID = '#3D8FF0';
 const RED      = '#DC2626';
+
+/* ─── Estimate range formatter ───────────────────────────────
+   Returns "$180–$230" (±10–15%, rounded to nearest $5).
+   Keeps "Custom" path for isCustom estimates.
+   ─────────────────────────────────────────────────────────── */
+function formatRange(total) {
+  const low  = Math.round((total * 0.90) / 5) * 5;
+  const high = Math.round((total * 1.15) / 5) * 5;
+  return `$${low}–$${high}`;
+}
 
 /* ─── Google Sheets webhook ──────────────────────────────────
    Paste your Apps Script Web App URL here after deploying.
@@ -260,7 +271,7 @@ function Step1({ data, set }) {
         What type of cleaning do you need?
       </h3>
       <p style={{ fontSize: '15px', color: GRAY, marginBottom: '1.75rem' }}>Choose the service that best fits your space.</p>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.85rem' }}>
+      <div className="qf-step-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.85rem' }}>
         {SERVICES.map(svc => (
           <button
             key={svc.id}
@@ -415,7 +426,7 @@ function Step3({ data, set }) {
 
       <div style={{ marginTop: '1rem', padding: '0.85rem 1.1rem', borderRadius: '12px', background: 'rgba(21,120,229,0.07)', border: `1px solid rgba(21,120,229,0.2)` }}>
         <p style={{ fontSize: '13px', color: BLUE, fontWeight: 500, margin: 0 }}>
-          📅 We'll confirm availability and send you a booking confirmation within 2 hours.
+          📅 We'll confirm availability and send you a booking confirmation in under 2 hours during working hours.
         </p>
       </div>
     </div>
@@ -436,7 +447,7 @@ function Step4({ data, set }) {
         Any add-ons?
       </h3>
       <p style={{ fontSize: '15px', color: GRAY, marginBottom: '1.75rem' }}>All optional — customize your clean.</p>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem' }}>
+      <div className="qf-step-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem' }}>
         {ADDONS.map(addon => {
           const on = selected.includes(addon.id);
           return (
@@ -557,7 +568,7 @@ function Step6({ data, estimate, consentChecked, setConsentChecked }) {
       <h3 style={{ fontSize: '22px', fontWeight: 800, color: DARK, marginBottom: '0.4rem', fontFamily: 'var(--font-display)' }}>
         Review Your Quote
       </h3>
-      <p style={{ fontSize: '15px', color: GRAY, marginBottom: '1.5rem' }}>Everything look right? Hit submit and we&apos;ll confirm within 2 hours.</p>
+      <p style={{ fontSize: '15px', color: GRAY, marginBottom: '1.5rem' }}>Everything look right? Hit submit and we&apos;ll confirm in under 2 hours during working hours.</p>
 
       <div style={{ background: WHITE, borderRadius: '16px', border: `1.5px solid ${BORDER}`, overflow: 'hidden' }}>
         <div style={{ background: DARK, padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -568,7 +579,7 @@ function Step6({ data, estimate, consentChecked, setConsentChecked }) {
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1.5px' }}>Estimate</div>
             <div style={{ fontSize: '26px', fontWeight: 800, color: BLUE, fontFamily: 'var(--font-display)' }}>
-              {estimate.isCustom ? 'Custom' : `$${estimate.total}`}
+              {estimate.isCustom ? 'Custom' : formatRange(estimate.total)}
             </div>
           </div>
         </div>
@@ -587,8 +598,8 @@ function Step6({ data, estimate, consentChecked, setConsentChecked }) {
         </div>
         {!estimate.isCustom && (
           <div style={{ background: LIGHT_BG, padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: `1px solid ${BORDER}` }}>
-            <span style={{ fontSize: '14px', fontWeight: 600, color: GRAY }}>Estimated Total</span>
-            <span style={{ fontSize: '22px', fontWeight: 800, color: BLUE, fontFamily: 'var(--font-display)' }}>${estimate.total} <span style={{ fontSize: '13px', fontWeight: 500, color: GRAY }}>/ clean</span></span>
+            <span style={{ fontSize: '14px', fontWeight: 600, color: GRAY }}>Estimated Range</span>
+            <span style={{ fontSize: '22px', fontWeight: 800, color: BLUE, fontFamily: 'var(--font-display)' }}>{formatRange(estimate.total)} <span style={{ fontSize: '13px', fontWeight: 500, color: GRAY }}>/ clean</span></span>
           </div>
         )}
       </div>
@@ -656,11 +667,11 @@ function EstimateSidebar({ estimate, data, currentStep }) {
 
       {/* Estimate display */}
       <div style={{ marginBottom: '1.5rem' }}>
-        <div style={{ fontSize: '42px', fontWeight: 800, fontFamily: 'var(--font-display)', color: estimate.isCustom ? 'rgba(255,255,255,0.4)' : WHITE, lineHeight: 1, letterSpacing: '-2px' }}>
-          {estimate.isCustom ? '$—' : `$${estimate.total}`}
+        <div style={{ fontSize: '36px', fontWeight: 800, fontFamily: 'var(--font-display)', color: estimate.isCustom ? 'rgba(255,255,255,0.4)' : WHITE, lineHeight: 1, letterSpacing: '-1px' }}>
+          {estimate.isCustom ? '$—' : formatRange(estimate.total)}
         </div>
         <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', marginTop: '0.25rem' }}>
-          {estimate.isCustom ? 'Custom quote required' : 'per clean · estimated'}
+          {estimate.isCustom ? 'Custom quote required' : 'estimated range · per clean'}
         </div>
       </div>
 
@@ -696,7 +707,7 @@ function EstimateSidebar({ estimate, data, currentStep }) {
       <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', marginBottom: '1.25rem' }} />
 
       {/* Trust badges */}
-      {['✅ Free estimate', '🔒 No payment now', '📞 Confirmed in 2hrs'].map(t => (
+      {['✅ Free estimate', '🔒 No payment now', '📞 Reply under 2hrs (business hours)'].map(t => (
         <div key={t} style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginBottom: '0.4rem', fontWeight: 500 }}>{t}</div>
       ))}
 
@@ -751,7 +762,7 @@ function SuccessScreen({ data, estimate }) {
       </h2>
       <p style={{ fontSize: '16px', color: GRAY, maxWidth: '460px', margin: '0 auto 2rem', lineHeight: 1.65 }}>
         Thanks, <strong style={{ color: DARK }}>{data.firstName}</strong>! We've received your quote request for <strong style={{ color: DARK }}>{svc?.label}</strong>.
-        Our team will confirm your appointment and send a detailed quote to <strong style={{ color: DARK }}>{data.email}</strong> within 2 hours.
+        Our team will confirm your appointment and send a detailed quote to <strong style={{ color: DARK }}>{data.email}</strong> in under 2 hours during working hours.
       </p>
 
       {/* Summary card */}
@@ -764,7 +775,7 @@ function SuccessScreen({ data, estimate }) {
           ['Service', svc?.label],
           ['Date', data.startDate || 'TBD'],
           ['Address', data.address || '—'],
-          ['Estimate', estimate.isCustom ? 'Custom Quote' : `$${estimate.total}/clean`],
+          ['Estimate', estimate.isCustom ? 'Custom Quote' : `${formatRange(estimate.total)}/clean`],
         ].map(([k, v]) => (
           <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: `1px solid ${BORDER}` }}>
             <span style={{ fontSize: '13px', color: GRAY }}>{k}</span>
@@ -821,7 +832,7 @@ function SuccessScreen({ data, estimate }) {
           border: `2px solid ${BORDER}`, color: GRAY,
           fontWeight: 600, fontSize: '14px', textDecoration: 'none',
         }}>
-          ✉️ Send an Email
+          Send an Email
         </a>
       </div>
     </motion.div>
@@ -830,6 +841,7 @@ function SuccessScreen({ data, estimate }) {
 
 /* ─── Main QuoteForm component ───────────────────────────── */
 export default function QuoteForm({ openMembership }) {
+  const isMobile = useIsMobile();
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);   // loading state
@@ -992,6 +1004,15 @@ export default function QuoteForm({ openMembership }) {
         overflow: 'hidden',
       }}
     >
+      {/* Mobile responsive overrides for inner step grids */}
+      <style>{`
+        @media (max-width: 768px) {
+          .qf-step-grid { grid-template-columns: 1fr !important; }
+          .qf-form-inner { padding: 1.5rem !important; }
+          .qf-step-header { padding: 1rem 1.5rem !important; }
+        }
+      `}</style>
+
       {/* Dot pattern background */}
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
@@ -1036,7 +1057,7 @@ export default function QuoteForm({ openMembership }) {
         ) : (
           <div style={{
             display: 'grid',
-            gridTemplateColumns: '1fr 320px',
+            gridTemplateColumns: isMobile ? '1fr' : '1fr 320px',
             gap: '2rem',
             alignItems: 'start',
           }}>
@@ -1049,7 +1070,7 @@ export default function QuoteForm({ openMembership }) {
               overflow: 'hidden',
             }}>
               {/* Step header bar */}
-              <div style={{
+              <div className="qf-step-header" style={{
                 padding: '1.5rem 2rem',
                 borderBottom: `1px solid ${BORDER}`,
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -1081,7 +1102,7 @@ export default function QuoteForm({ openMembership }) {
               </div>
 
               {/* Step body — GSAP-animated on step change */}
-              <div style={{ padding: '2rem', minHeight: '380px', overflow: 'hidden' }}>
+              <div className="qf-form-inner" style={{ padding: '2rem', minHeight: '380px', overflow: 'hidden' }}>
                 {/* ⚠️  Honeypot — hidden from real users, visible to bots.
                     If this field is filled, the submission is silently blocked.
                     MUST be visually hidden but NOT display:none (some bots detect that). */}

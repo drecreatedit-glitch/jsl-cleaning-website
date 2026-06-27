@@ -553,7 +553,7 @@ export default function Hero() {
               marginBottom: '2rem',
             }}
           >
-            <a href="#cta" className="btn btn-primary btn-lg">
+            <a href="#quote" className="btn btn-primary btn-lg">
               Get a Free Quote
             </a>
             <a href="#services" className="btn btn-ghost btn-lg">

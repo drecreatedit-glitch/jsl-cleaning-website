@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import useIsMobile from '../hooks/useIsMobile';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,7 +13,7 @@ const SERVICES = [
     price: 'Custom Quote',
     headline: 'The Essential Clean',
     body: 'Kitchen, bathrooms, living areas, and bedrooms — all the essentials handled with care and consistency.',
-    image: 'https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=900&q=80',
+    image: 'https://images.unsplash.com/__ZMnefoI3k?w=900&q=80',
     features: [
       'Sanitize counters & sink',
       'Disinfect high-touch points',
@@ -28,7 +29,7 @@ const SERVICES = [
     price: 'Custom Quote',
     headline: 'Your Home, On Schedule',
     body: 'Flexible recurring plans — daily, weekly, bi-weekly, or monthly. We keep your space spotless without you lifting a finger.',
-    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&q=80',
+    image: 'https://images.unsplash.com/PE4pFgcYzoQ?w=900&q=80',
     features: [
       'Choose your frequency',
       'Consistent team every visit',
@@ -43,7 +44,7 @@ const SERVICES = [
     price: 'Custom Quote',
     headline: 'Go Beyond the Surface',
     body: 'When standard just isn\'t enough. We detail every corner, edge, grout line, and surface — top to bottom.',
-    image: 'https://images.unsplash.com/photo-1563453392212-326f5e854473?w=900&q=80',
+    image: 'https://images.unsplash.com/RxblbDLXTmk?w=900&q=80',
     features: [
       'Degrease stovetop & knobs',
       'Inside microwave',
@@ -59,7 +60,7 @@ const SERVICES = [
     price: 'Custom Quote',
     headline: 'Fresh Starts, Clean Exits',
     body: 'Everything in deep clean plus inside cabinets, closets, deodorizing, and a full walkthrough. Get your deposit back.',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80',
+    image: 'https://images.unsplash.com/UPbYh3A5cdg?w=900&q=80',
     features: [
       'Inside cabinets & drawers',
       'Closets & shelves',
@@ -74,7 +75,7 @@ const SERVICES = [
     price: 'Custom Quote',
     headline: 'Guest-Ready Every Time',
     body: 'Turnover cleans between guests — fast, thorough, and inspection-ready. Keep your ratings high and your bookings full.',
-    image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=900&q=80',
+    image: 'https://images.unsplash.com/vIbxvHj9m9g?w=900&q=80',
     features: [
       'Quick turnaround times',
       'Linen & towel refresh available',
@@ -89,7 +90,7 @@ const SERVICES = [
     price: 'Custom Quote',
     headline: 'Professional Spaces Deserve Professional Cleaning',
     body: 'Flexible scheduling for offices, retail, and commercial spaces. After-hours available. Minimal disruption, maximum results.',
-    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=900&q=80',
+    image: 'https://images.unsplash.com/qHiucnOW24w?w=900&q=80',
     features: [
       'Daily or weekly contracts',
       'After-hours available',
@@ -284,7 +285,7 @@ function StickyPanel({ activeIndex }) {
 
 
 /* ─── Single right-panel chapter ────────────────────────── */
-function ServiceChapter({ svc, index, chapterRef }) {
+function ServiceChapter({ svc, index, chapterRef, isMobile }) {
   const featuresRef = useRef(null);
   const bodyRef = useRef(null);
   const headingRef = useRef(null);
@@ -315,14 +316,30 @@ function ServiceChapter({ svc, index, chapterRef }) {
       ref={chapterRef}
       data-service-index={index}
       style={{
-        minHeight: '100vh',
+        minHeight: isMobile ? 'auto' : '100vh',
         display: 'flex',
         alignItems: 'center',
-        padding: 'clamp(3rem, 6vw, 5rem) clamp(2rem, 5vw, 4rem)',
+        padding: isMobile
+          ? '2.5rem 1.5rem 3rem'
+          : 'clamp(3rem, 6vw, 5rem) clamp(2rem, 5vw, 4rem)',
         borderBottom: '1px solid var(--border)',
       }}
     >
-      <div style={{ maxWidth: '480px' }}>
+      <div style={{ maxWidth: isMobile ? '100%' : '480px', width: '100%' }}>
+
+        {/* Mobile-only service image (sticky panel is hidden on mobile) */}
+        {isMobile && (
+          <div style={{
+            width: '100%',
+            height: '220px',
+            borderRadius: '18px',
+            overflow: 'hidden',
+            marginBottom: '1.75rem',
+            backgroundImage: `linear-gradient(to top, rgba(11,18,32,0.45), rgba(11,18,32,0.05)), url(${svc.image})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }} />
+        )}
 
         {/* Chapter number */}
         <div style={{
@@ -428,7 +445,7 @@ function ServiceChapter({ svc, index, chapterRef }) {
 
         {/* CTA link */}
         <a
-          href="#pricing"
+          href="#quote"
           style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -490,6 +507,7 @@ function NavDots({ activeIndex, onDotClick }) {
 /* ─── Main component ─────────────────────────────────────── */
 export default function ServicesScroll() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const isMobile = useIsMobile();
   const sectionRef = useRef(null);
   const chapterRefs = useRef(SERVICES.map(() => ({ current: null })));
 
@@ -548,8 +566,8 @@ export default function ServicesScroll() {
 
   return (
     <>
-      {/* Nav Dots */}
-      <NavDots activeIndex={activeIndex} onDotClick={handleDotClick} />
+      {/* Nav Dots — desktop only */}
+      {!isMobile && <NavDots activeIndex={activeIndex} onDotClick={handleDotClick} />}
 
       <section
         ref={sectionRef}
@@ -576,20 +594,21 @@ export default function ServicesScroll() {
           </p>
         </div>
 
-        {/* Scrollytelling strip */}
+        {/* Scrollytelling strip — desktop: sticky panel + chapters; mobile: stacked cards */}
         <div style={{ display: 'flex', alignItems: 'flex-start' }}>
 
-          {/* ── LEFT: sticky panel ────────────────────── */}
-          <StickyPanel activeIndex={activeIndex} />
+          {/* ── LEFT: sticky panel (desktop only) ──────── */}
+          {!isMobile && <StickyPanel activeIndex={activeIndex} />}
 
           {/* ── RIGHT: scrollable chapters ────────────── */}
-          <div style={{ width: '50%', flexShrink: 0 }}>
+          <div style={{ width: isMobile ? '100%' : '50%', flexShrink: 0 }}>
             {SERVICES.map((svc, i) => (
               <ServiceChapter
                 key={svc.id}
                 svc={svc}
                 index={i}
                 chapterRef={chapterRefs.current[i]}
+                isMobile={isMobile}
               />
             ))}
           </div>

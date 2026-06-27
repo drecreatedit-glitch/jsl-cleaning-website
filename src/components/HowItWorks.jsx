@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import useIsMobile from '../hooks/useIsMobile';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -42,6 +43,7 @@ const STEPS = [
 ];
 
 export default function HowItWorks() {
+  const isMobile    = useIsMobile();
   const sectionRef  = useRef(null);
   const headerRef   = useRef(null);
   const lineRef     = useRef(null);   // SVG path
@@ -207,6 +209,7 @@ export default function HowItWorks() {
               overflow: 'visible',
               zIndex: 0,
               pointerEvents: 'none',
+              display: isMobile ? 'none' : 'block',
             }}
           >
             {/* Track (dashed grey) */}
@@ -227,8 +230,8 @@ export default function HowItWorks() {
           {/* ── Three step columns ────────────────────────── */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '2rem',
+            gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
+            gap: isMobile ? '2.5rem' : '2rem',
             position: 'relative',
             zIndex: 1,
           }}>

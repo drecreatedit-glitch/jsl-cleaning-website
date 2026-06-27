@@ -116,7 +116,7 @@ export default function TermsOfService() {
           <strong style={{ color: DARK }}>JSL Cleaning Services LLC</strong><br />
           South Florida &amp; Tampa Bay Area<br />
           📞 <a href="tel:3479546309" style={{ color: BLUE, textDecoration: 'none' }}>(347) 954-6309</a><br />
-          ✉️ <a href="mailto:jlopez@jslcleaningservices.com" style={{ color: BLUE, textDecoration: 'none' }}>jlopez@jslcleaningservices.com</a>
+          <a href="mailto:jlopez@jslcleaningservices.com" style={{ color: BLUE, textDecoration: 'none' }}>jlopez@jslcleaningservices.com</a>
         </div>
       </Section>
     </div>

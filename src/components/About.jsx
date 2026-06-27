@@ -137,7 +137,7 @@ export default function About() {
             {/* Parallax image — slightly taller so it can travel up */}
             <img
               ref={imgRef}
-              src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=900&q=80"
+              src="https://images.unsplash.com/8ua8sWEGdmI?w=900&q=80"
               alt="JSL professional cleaner at work"
               style={{
                 position: 'absolute',
@@ -281,8 +281,8 @@ export default function About() {
           {/* Panoramic image — slightly wider so it can drift left */}
           <img
             ref={panoBgRef}
-            src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600&q=80"
-            alt="JSL Cleaning — professional move-out service"
+            src="https://images.unsplash.com/MwxsRSG1A2s?w=1600&q=80"
+            alt="JSL Cleaning — professional service"
             style={{
               position: 'absolute',
               top: 0,
