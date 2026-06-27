@@ -131,12 +131,12 @@ const recordSubmission = () => submissionTimes.push(Date.now());
 
 /* ─── Service data ───────────────────────────────────────── */
 const SERVICES = [
-  { id: 'basic',     label: 'Basic Cleaning',     icon: '🧹', base: 165, desc: 'Kitchens, baths, living areas' },
-  { id: 'deep',      label: 'Deep Cleaning',       icon: '✨', base: 250, desc: 'Inside appliances, grout, corners' },
-  { id: 'movein',    label: 'Move-In / Move-Out',  icon: '📦', base: 330, desc: 'Cabinet interiors, deodorize, full detail' },
+  { id: 'basic',     label: 'Basic Cleaning',     icon: '🧹', base: 150, rate: 0.135, desc: 'Kitchens, baths, living areas' },
+  { id: 'deep',      label: 'Deep Cleaning',       icon: '✨', base: 245, rate: 0.22,  desc: 'Inside appliances, grout, corners' },
+  { id: 'movein',    label: 'Move-In / Move-Out',  icon: '📦', base: 320, rate: 0.28,  desc: 'Cabinet interiors, deodorize, full detail' },
   { id: 'airbnb',    label: 'Airbnb Turnover',    icon: '🏠', base: 0,   desc: 'Guest-ready between stays', customQuote: true },
   { id: 'office',    label: 'Office Cleaning',     icon: '🏢', base: 0,   desc: 'Commercial & retail spaces', customQuote: true },
-  { id: 'recurring', label: 'Recurring Plan',      icon: '🔄', base: 165, desc: 'Weekly, bi-weekly, or monthly' },
+  { id: 'recurring', label: 'Recurring Plan',      icon: '🔄', base: 140, rate: 0.135, desc: 'Weekly, bi-weekly, or monthly' },
 ];
 
 const FREQUENCIES = [
@@ -166,21 +166,13 @@ const STEPS = [
   { num: 6, label: 'Review' },
 ];
 
-/* ─── Sq-ft size bands ────────────────────────────────────── */
-const SQFT_MULTIPLIER = (sqft) => {
-  if (sqft <= 800)  return 1.0;
-  if (sqft <= 1200) return 1.15;
-  if (sqft <= 1800) return 1.30;
-  if (sqft <= 2500) return 1.50;
-  if (sqft <= 3500) return 1.75;
-  return 2.10;
-};
-
-/* ─── South Florida market pricing factors ───────────────── */
-const BED_RATE       = 28;    // per additional bedroom beyond the 1st
-const BATH_RATE      = 35;    // per additional full bath beyond the 1st
-const HALF_BATH_RATE = 18;    // per half bath / powder room
-const SFLA_MARKET    = 1.10;  // ~10% South Florida regional premium
+/* ─── Pricing factors ─────────────────────────────────────────
+   Square-footage-based model. Each service has a per-sqft `rate`
+   and a minimum floor (`base`, also the "Starting at" anchor).
+   South Florida market rates are baked into the per-sqft rates.
+   Bedrooms/bathrooms are collected for scoping but do NOT affect
+   the ballpark — square footage is the single pricing driver.
+   ─────────────────────────────────────────────────────────── */
 const OFFICE_SURCHARGE = 1.35; // +35% for commercial / office property type
 
 /* ─── Framer Motion variants ─────────────────────────────── */
@@ -304,10 +296,9 @@ function Step1({ data, set }) {
             <div style={{ fontSize: '28px', marginBottom: '0.5rem' }}>{svc.icon}</div>
             <div style={{ fontWeight: 700, fontSize: '14px', color: DARK, marginBottom: '0.2rem', fontFamily: 'var(--font-display)' }}>{svc.label}</div>
             <div style={{ fontSize: '12px', color: GRAY, lineHeight: 1.4 }}>{svc.desc}</div>
-            {svc.customQuote
-              ? <div style={{ marginTop: '0.5rem', fontSize: '11px', fontWeight: 700, color: BLUE_MID }}>CUSTOM QUOTE</div>
-              : <div style={{ marginTop: '0.5rem', fontSize: '13px', fontWeight: 700, color: BLUE }}>Starting at ${svc.base}</div>
-            }
+            {svc.customQuote && (
+              <div style={{ marginTop: '0.5rem', fontSize: '11px', fontWeight: 700, color: BLUE_MID }}>CUSTOM QUOTE</div>
+            )}
           </button>
         ))}
       </div>
@@ -717,10 +708,8 @@ function Step6({ data, estimate, consentChecked, setConsentChecked }) {
             <div style={{ fontSize: '18px', fontWeight: 800, color: WHITE, fontFamily: 'var(--font-display)', marginTop: '0.2rem' }}>JSL Cleaning Services</div>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1.5px' }}>Estimate</div>
-            <div style={{ fontSize: '26px', fontWeight: 800, color: BLUE, fontFamily: 'var(--font-display)' }}>
-              {estimate.isCustom ? 'Custom' : formatRange(estimate.total)}
-            </div>
+            <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1.5px' }}>Confirmed by</div>
+            <div style={{ fontSize: '15px', fontWeight: 700, color: WHITE, fontFamily: 'var(--font-display)', marginTop: '0.2rem' }}>JSL rep · 24 hrs</div>
           </div>
         </div>
         <div style={{ padding: '1rem 1.5rem' }}>
@@ -736,12 +725,11 @@ function Step6({ data, estimate, consentChecked, setConsentChecked }) {
           <ReviewRow label="Contact" value={`${data.firstName || ''} ${data.lastName || ''} · ${data.phone || ''}`} />
           <ReviewRow label="Address" value={data.address || '—'} />
         </div>
-        {!estimate.isCustom && (
-          <div style={{ background: LIGHT_BG, padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: `1px solid ${BORDER}` }}>
-            <span style={{ fontSize: '14px', fontWeight: 600, color: GRAY }}>Estimated Range</span>
-            <span style={{ fontSize: '22px', fontWeight: 800, color: BLUE, fontFamily: 'var(--font-display)' }}>{formatRange(estimate.total)} <span style={{ fontSize: '13px', fontWeight: 500, color: GRAY }}>/ clean</span></span>
-          </div>
-        )}
+        <div style={{ background: LIGHT_BG, padding: '0.85rem 1.5rem', borderTop: `1px solid ${BORDER}` }}>
+          <span style={{ fontSize: '13px', color: GRAY, lineHeight: 1.5 }}>
+            We'll email your detailed estimate within 24 hours — no payment now.
+          </span>
+        </div>
       </div>
 
       {/* ── Required consent checkbox ─────────────────────────── */}
@@ -802,25 +790,24 @@ function EstimateSidebar({ estimate, data, currentStep }) {
       color: WHITE,
     }}>
       <div style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '2px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', marginBottom: '1rem' }}>
-        Live Estimate
+        Your Quote
       </div>
 
-      {/* Estimate display */}
+      {/* Reassurance — no price shown during the form */}
       <div style={{ marginBottom: '1.5rem' }}>
-        <div style={{ fontSize: '36px', fontWeight: 800, fontFamily: 'var(--font-display)', color: estimate.isCustom ? 'rgba(255,255,255,0.4)' : WHITE, lineHeight: 1, letterSpacing: '-1px' }}>
-          {estimate.isCustom ? '$—' : formatRange(estimate.total)}
+        <div style={{ fontSize: '15px', fontWeight: 600, color: WHITE, lineHeight: 1.5, marginBottom: '0.4rem' }}>
+          We're building your personalized quote.
         </div>
-        <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', marginTop: '0.25rem' }}>
-          {estimate.isCustom ? 'Custom quote required' : 'estimated range · per clean'}
+        <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.55 }}>
+          A JSL rep will confirm your final price within 24 hours — no payment now.
         </div>
       </div>
 
       {/* Breakdown lines */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem', marginBottom: '1.25rem' }}>
         {svc && (
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
+          <div style={{ fontSize: '13px' }}>
             <span style={{ color: 'rgba(255,255,255,0.55)' }}>{svc.label}</span>
-            <span style={{ color: WHITE, fontWeight: 600 }}>{svc.customQuote ? 'Custom' : `$${svc.base}`}</span>
           </div>
         )}
         {data.sqft && !estimate.isCustom && (
@@ -902,6 +889,25 @@ function SuccessScreen({ data, estimate }) {
         Our team will confirm your appointment and send a detailed quote to <strong style={{ color: DARK }}>{data.email}</strong> within 24 hours.
       </p>
 
+      {/* Estimated range callout — the only place a price is shown */}
+      <div style={{
+        background: 'linear-gradient(135deg, rgba(21,120,229,0.08) 0%, rgba(21,120,229,0.03) 100%)',
+        border: `1.5px solid rgba(21,120,229,0.25)`,
+        borderRadius: '16px', padding: '1.5rem',
+        maxWidth: '400px', margin: '0 auto 1.5rem',
+      }}>
+        <div style={{ fontSize: '12px', fontWeight: 700, color: BLUE, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+          Estimated Range
+        </div>
+        <div style={{ fontSize: '34px', fontWeight: 800, color: DARK, fontFamily: 'var(--font-display)', letterSpacing: '-1px', lineHeight: 1 }}>
+          {estimate.isCustom ? 'Custom Quote' : formatRange(estimate.total)}
+          {!estimate.isCustom && <span style={{ fontSize: '15px', fontWeight: 500, color: GRAY }}> / clean</span>}
+        </div>
+        <p style={{ fontSize: '13px', color: GRAY, lineHeight: 1.55, marginTop: '0.75rem' }}>
+          💡 This is a ballpark based on your home's size. Your JSL rep will confirm the exact final price within 24 hours.
+        </p>
+      </div>
+
       {/* Summary card */}
       <div style={{
         background: LIGHT_BG, borderRadius: '16px', border: `1.5px solid ${BORDER}`,
@@ -912,7 +918,6 @@ function SuccessScreen({ data, estimate }) {
           ['Service', svc?.label],
           ['Date', data.startDate || 'TBD'],
           ['Address', data.address || '—'],
-          ['Estimate', estimate.isCustom ? 'Custom Quote' : `${formatRange(estimate.total)}/clean`],
         ].map(([k, v]) => (
           <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: `1px solid ${BORDER}` }}>
             <span style={{ fontSize: '13px', color: GRAY }}>{k}</span>
@@ -1021,25 +1026,20 @@ export default function QuoteForm({ openMembership }) {
     );
   }, [step]);
 
-  /* Live estimate calculation */
+  /* Live estimate calculation — square-footage driven, floored at the
+     service minimum. Bedrooms/bathrooms do not affect the ballpark. */
   const estimate = useMemo(() => {
     const svc = SERVICES.find(s => s.id === data.service);
     if (!svc || svc.customQuote) return { total: 0, isCustom: true };
 
-    const base      = svc.base;
-    const sqftMult  = SQFT_MULTIPLIER(data.sqft || 1200);
-    const freq      = FREQUENCIES.find(f => f.id === data.frequency);
-    const freqMult  = freq?.multiplier || 1;
+    const sqft       = data.sqft || 1200;
+    const freq       = FREQUENCIES.find(f => f.id === data.frequency);
+    const freqMult   = freq?.multiplier || 1;
     const addonTotal = (data.addons || []).reduce((s, id) => s + (ADDONS.find(a => a.id === id)?.price || 0), 0);
-
-    const beds      = Math.max(data.bedrooms  || 1, 1);
-    const baths     = Math.max(data.bathrooms || 1, 1);
-    const halfBaths = data.halfBaths || 0;
-    const roomAdj   = (beds - 1) * BED_RATE + (baths - 1) * BATH_RATE + halfBaths * HALF_BATH_RATE;
-
     const officeMult = data.propertyType === 'Office' ? OFFICE_SURCHARGE : 1;
-    const subtotal   = (base * sqftMult + roomAdj) * SFLA_MARKET * officeMult;
-    const total      = Math.round(subtotal * freqMult) + addonTotal;
+
+    const raw   = Math.max(svc.rate * sqft, svc.base) * officeMult; // per-sqft, floored at minimum
+    const total = Math.round(raw * freqMult) + addonTotal;
     return { total, isCustom: false };
   }, [data]);
 
