@@ -15,7 +15,7 @@
  */
 
 const SHEET_NAME = 'Leads';
-const NOTIFY_EMAIL = 'jlopez@jslcleaningservices.com';
+const NOTIFY_EMAIL = 'jlopez@jslcleaningservices.com, drecreatedit@gmail.com';
 const SHEET_HEADERS = [
   'Timestamp (ET)', 'Full Name', 'Email', 'Phone', 'Service Address',
   'Service Type', 'Frequency', 'Bedrooms', 'Bathrooms', 'Sq Ft',
