@@ -13,7 +13,7 @@ const SERVICES = [
     price: 'Custom Quote',
     headline: 'The Essential Clean',
     body: 'Kitchen, bathrooms, living areas, and bedrooms — all the essentials handled with care and consistency.',
-    image: 'https://images.unsplash.com/photo-1684407616956-3cccbb3ab0bc?w=900&q=80',
+    image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=900&q=80',
     features: [
       'Sanitize counters & sink',
       'Disinfect high-touch points',
@@ -44,7 +44,7 @@ const SERVICES = [
     price: 'Custom Quote',
     headline: 'Go Beyond the Surface',
     body: 'When standard just isn\'t enough. We detail every corner, edge, grout line, and surface — top to bottom.',
-    image: 'https://images.unsplash.com/photo-1663047397245-2ddad26c5dd7?w=900&q=80',
+    image: 'https://images.unsplash.com/photo-1563453392212-326f5e854473?w=900&q=80',
     features: [
       'Degrease stovetop & knobs',
       'Inside microwave',
